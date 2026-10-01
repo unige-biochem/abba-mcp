@@ -1,0 +1,44 @@
+{
+  "manifest_version": "0.4",
+  "name": "abba-fiji",
+  "display_name": "ABBA (Fiji)",
+  "version": "0.1.0",
+  "description": "Register brain sections to atlases with ABBA in Fiji, driven by your assistant",
+  "long_description": "Starts ABBA (Aligning Big Brains and Atlases) in a pinned Fiji the first time it is needed, and lets the assistant run ABBA's commands, look at rendered snapshots and save the session as a replayable Groovy pipeline. Bundles version-matched documentation. Experimental (codename sextant).",
+  "author": { "name": "Nicolas Chiaruttini", "url": "https://github.com/NicoKiaru" },
+  "homepage": "https://abba-documentation.readthedocs.io",
+  "support": "https://forum.image.sc/tag/abba",
+  "icon": "icon.png",
+  "server": {
+    "type": "uv",
+    "entry_point": "src/abba_mcp/__init__.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "--directory", "${__dirname}", "abba-mcp"],
+      "env": { "ABBA_MCP_HEADLESS": "${user_config.headless}" }
+    }
+  },
+  "user_config": {
+    "headless": {
+      "type": "boolean",
+      "title": "Run Fiji without a window",
+      "description": "Off: ABBA opens its window so you can follow and take over. On: no window (servers, remote machines).",
+      "default": false,
+      "required": false
+    }
+  },
+  "tools": [
+    { "name": "fiji_module_search", "description": "Find ABBA and Fiji commands" },
+    { "name": "fiji_module_describe", "description": "Describe a command's inputs and outputs" },
+    { "name": "fiji_module_run", "description": "Run a command or script with JSON inputs" },
+    { "name": "fiji_module_status", "description": "Follow a long run" },
+    { "name": "fiji_objects", "description": "List live objects (ABBA sessions, atlases)" },
+    { "name": "fiji_module_script", "description": "Save the session as a Groovy pipeline" },
+    { "name": "abba_docs_search", "description": "Search the bundled docs" },
+    { "name": "abba_docs_read", "description": "Read a bundled doc file" }
+  ],
+  "license": "BSD-2-Clause",
+  "compatibility": { "runtimes": { "python": ">=3.10" } },
+  "repository": { "type": "git", "url": "https://github.com/BIOP/ijp-imagetoatlas" },
+  "privacy_policies": []
+}

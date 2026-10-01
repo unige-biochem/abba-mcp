@@ -1,0 +1,20 @@
+# ABBA - Get State
+
+Menu: `Plugins > BIOP > Atlas > Multi Image To Atlas > Inspect > ABBA - Get State`  
+Class: `ch.epfl.biop.atlas.aligner.command.GetStateCommand`
+
+Returns the state of slices as JSON: the content of a state file, plus, per slice, its index, name, channel names, selection, and position along the slicing axis in both conventions ('z_mm' as displayed, 'slicing_axis_position' as stored). Registrations are listed per slice, long transforms elided.
+
+## Inputs
+
+- `max_string_length` (int) **Max string length**, default `200`
+  Longer strings, like spline transforms, are elided; 0 keeps them all.
+- `mp` (MultiSlicePositioner) **ABBA session**
+  The ABBA session to read.
+- `slices_csv` (String) **Slices**, default `*`, optional
+  0-based indices of the slices along the slicing axis, comma separated (e.g. '0,3'), '*' for all slices, or empty for the selected slices. Indices follow the slice order and change when a slice moves.
+
+## Outputs
+
+- `state` (String): The state, as compact JSON.
+

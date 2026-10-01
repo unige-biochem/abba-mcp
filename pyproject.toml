@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abba-fiji-mcp"
+version = "0.1.0.dev0"
+description = "ABBA (Aligning Big Brains and Atlases) in Fiji, for AI assistants: MCP server, pinned environment and docs"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.9,<2",
+    "jgo[cli]>=3.1",
+]
+
+[project.scripts]
+abba-mcp = "abba_mcp:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"abba_mcp" = ["env/*", "data/**/*"]

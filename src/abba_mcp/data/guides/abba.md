@@ -1,0 +1,94 @@
+# ABBA with the module tools: workflow and traps
+
+ABBA registers 2D histological sections to a 3D reference atlas. Each section ("slice") gets a position
+along the atlas slicing axis, then a stack of in-plane registrations (affine, spline...) that map the atlas
+onto it. The result is used to assign brain regions to cells, usually in QuPath.
+
+See also: `images-and-import.md` (calibration, formats, display), `storage-and-exports.md` (state files,
+coordinates, exports). Commands: `../commands/INDEX.md`.
+
+## Before starting: ask the user
+
+- **The atlas.** `Open Atlas` lists what is available (describe it: the list is computed at runtime).
+  `allen_mouse_10um_java` (Allen mouse CCFv3.1) and `whs_sd_rat_39um_java` (Waxholm rat v4.2) are built in;
+  names like `allen_mouse_25um@3.0` are BrainGlobe atlases, downloaded on demand. Avoid the
+  `Get BrainGlobe Atlases...` and "not downloaded yet" entries without asking: they download or open a window.
+- **How the sections were cut**, which sets the axes of `ABBA - ABBA Start`:
+  coronal x=`RL (Right-Left)`, y=`SI (Superior-Inferior)`, z=`AP (Anterior-Posterior)`;
+  sagittal x=`AP`, y=`SI`, z=`LR`; horizontal x=`LR`, y=`AP`, z=`SI` (full choice strings in the command doc).
+- **Where the images are.** A QuPath project is the recommended input: results go back into it. **One
+  project per animal**: the atlas slicing angle is shared by all slices of a session.
+- If known: position of the first section and spacing (otherwise import positions are placeholders), which
+  channel holds what (nuclei, autofluorescence...), and whether sections are whole or hemi-brains.
+
+## Typical order
+
+| Step | Commands |
+|---|---|
+| 1. Atlas, session | `Open Atlas`, then `ABBA - ABBA Start` (window) or `ABBA - Align Big Brains and Atlases (no GUI)` |
+| 2. Import | `ABBA - Import QuPath Project` (preferred), `ABBA - Import With Bio-Formats`; demo: `ABBA - Open Demo Slices From ZENODO` |
+| 3. Remove non-sections | `ABBA - Get State` (names), ask, `ABBA - Delete Slices` |
+| 4. Orientation | `ABBA - Rotate` (Z any angle; X/Y only ±180 = flip), `ABBA - Mirror Slices` for hemi-sections |
+| 5. Display ranges (DeepSlice only) | `ABBA - Set Slices Min Max Display Range`: no saturation |
+| 6. Position + slicing angle | `ABBA - DeepSlice Registration`, on all slices of the animal at once |
+| 7. Affine | `ABBA - Elastix Registration (Affine)` |
+| 8. Spline (once or twice) | `ABBA - Elastix Registration (Spline)` |
+| 9. Check | `ABBA - Snapshot` on all slices, then on doubtful ones without labels |
+| 10. Save, export | `ABBA - Save State`, `ABBA - Export Registrations To QuPath Project`, `fiji_module_script` |
+
+A complete, tested run of steps 1-9 on demo data: `../examples/abba_demo_pipeline.groovy`.
+
+## Choosing inputs
+
+- **Channels are paired in order** for Elastix: `atlas_channels_csv` `0,1` with `slice_channels_csv` `0,1`
+  pairs atlas channel 0 (Nissl for Allen) with slice channel 0 (e.g. DAPI) and atlas channel 1 (Ara,
+  autofluorescence-like) with slice channel 1. Lists must have the same length; `*` is not accepted; a channel
+  may be repeated; each pair weighs equally. Selected slice channels must share a pixel type.
+- **Elastix affine** `pixel_size_um` 40 is a good start. **Spline** `nb_control_points_x` 5 to 20 (more is
+  more flexible and risks overfitting where tissue and atlas differ; 12 to 15 is common), `pixel_size_um` 20.
+- **DeepSlice** `model` must match the species. `post_processing`: `Keep order` is the safe default
+  (DeepSlice sometimes swaps slices); `Keep order + set spacing` when the cutting interval is known.
+  Try `ensemble` both ways. With 2 slices or fewer, the angle is not propagated.
+- Reference recipe from the documentation: affine then spline with DAPI↔Nissl and autofluorescence↔Ara,
+  15 control points; about 10 minutes for 50 slices on a laptop.
+
+## Traps
+
+- **Selection.** Most commands act on the *selected* slices. `ABBA - Select Slices` adds to the selection,
+  `ABBA - Deselect Slices` removes. Indices are 0-based along the slicing axis and **change when a slice moves**:
+  re-read the state after DeepSlice or any move.
+- **Queued work.** Registration commands return at once and run in the background (in parallel).
+  `ABBA - Get State` and `ABBA - Snapshot` wait until the queue is empty: use them before judging or saving.
+- **Labels are not observations.** A snapshot draws the atlas at the slice's current position. After an
+  import that position is a placeholder (`reg=0` in the header). Turn labels and borders off to see the tissue.
+- **Positions come in two conventions**: `z_mm` (displayed, atlas convention, 0 = front of the atlas) and
+  `slicing_axis_position` (stored in state files). Both are in `ABBA - Get State`.
+- **Registrations stack per slice** and apply in sequence. `ABBA - Remove Last Registration` pops one per
+  selected slice (positions are not affected). `ABBA - Undo or Redo` counts actions, not commands: DeepSlice
+  or Elastix on n slices is n actions.
+- **Broken or missing tissue** registers badly with splines: expect local failures there, and look.
+- **Hemi-sections**: restrict the region with `ABBA - Define Rectangular ROI` (mm, atlas section centred on 0)
+  or mirror before DeepSlice. The ROI also crops exports: restore it afterwards.
+- **Brightfield** (white background): `ABBA - Set Slice Background` (about 200-255 for 8-bit) so that areas
+  outside the image are not black, which would bias registration.
+- **Loading a state** (`ABBA - Load State`) adds its slices to the current session: start from an empty one,
+  with the same atlas.
+
+## What the commands cannot do (yet)
+
+No command moves one slice along the slicing axis, sets key slices, or distributes spacing: in the ABBA
+window these are mouse actions. Without DeepSlice, position and slicing angle cannot be corrected through
+commands; ask the user to do it in the window, then re-read the state. Commands that need a window and a
+person: `ABBA - Manual Affine Registration`, `ABBA - BigWarp Registration`, `ABBA - Edit Last Registration`,
+`ABBA - Adjust Slicing`. Do not use the obsolete `ABBA - DeepSlice Registration (Web)` / `(Local)`.
+
+## When something disagrees with what you expected
+
+Question what the expectation was built on before blaming the tool: a placeholder position, a saturated
+channel, a wrong channel pairing, an uncalibrated image. Then look again, on one slice, without labels.
+
+## Citing
+
+`ABBA - Get Prompt for Methods Writing` (selected slices) produces a methods paragraph with the citations
+for ABBA (Cell Reports 2025, doi 10.1016/j.celrep.2025.115876), the atlas, DeepSlice, Elastix and BrainGlobe
+as used.
