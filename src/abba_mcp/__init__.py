@@ -162,9 +162,18 @@ def _docs_read(path: str) -> str:
     return f.read_text(encoding="utf-8")
 
 
-def instructions() -> str:
+MODES = {
+    True: "**Mode: window.** Fiji shows its windows on the user's screen: start sessions with `ABBA - ABBA Start`, "
+          "and the user can watch and act in the ABBA window too.",
+    False: "**Mode: headless.** Fiji runs without any window, and the user cannot see it: start sessions with "
+           "`ABBA - Align Big Brains and Atlases (no GUI)`. Commands that need a window fail or do nothing "
+           "(`ABBA - ABBA Start`, manual and BigWarp registrations). Show the user snapshots instead.",
+}
+
+
+def instructions(gui: bool = True) -> str:
     text = (DATA / "instructions.md").read_text(encoding="utf-8")
-    return text.replace("{DOCS}", DATA.as_posix())
+    return text.replace("{DOCS}", DATA.as_posix()).replace("{MODE}", MODES[gui])
 
 
 def main() -> int:
@@ -174,10 +183,10 @@ def main() -> int:
     args = parser.parse_args()
     gui = not (args.headless or os.environ.get("ABBA_MCP_HEADLESS", "").lower() in ("1", "true", "yes"))
     if args.print_instructions:
-        print(instructions())
+        print(instructions(gui))
         return 0
 
-    server = Server("abba-mcp", instructions=instructions())
+    server = Server("abba-mcp", instructions=instructions(gui))
 
     @server.list_tools()
     async def list_tools() -> list[types.Tool]:
