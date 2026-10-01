@@ -31,15 +31,19 @@ Run them by title with `fiji_module_run`. One file per command, in a folder name
 - [ABBA - How to cite](Cite/ABBA - How to cite.md) - Shows how to cite ABBA and the tools it uses, in a window (requires an internet connection).
 - [ABBA - Delete Slices](Edit/ABBA - Delete Slices.md) - Removes slices from the session, as the delete action of the ABBA window does. No file is touched, and undo re
 - [ABBA - Deselect Slices](Edit/ABBA - Deselect Slices.md) - Removes slices from the current selection, by index. Other slices keep their selection state.
+- [ABBA - Distribute Slices](Edit/ABBA - Distribute Slices.md) - Spaces the selected slices evenly along the slicing axis, as 'Distribute Slices [D]' does in the ABBA window. 
+- [ABBA - Move Slices](Edit/ABBA - Move Slices.md) - Moves slices along the slicing axis to the given positions, as dragging them in the ABBA window does. Position
 - [ABBA - Raster and cache deformation field](Edit/ABBA - Raster and cache deformation field.md) - Speeds up the display of the selected slices by computing their deformation field on a grid and interpolating 
 - [ABBA - Raster slice](Edit/ABBA - Raster slice.md) - Speeds up the display of the selected slices by computing and caching their registered image at a fixed pixel 
 - [ABBA - Rotate](Edit/ABBA - Rotate.md) - Rotates the selected slices around the center of the registration ROI. Z: in-plane rotation, clockwise on scre
 - [ABBA - Select Slices](Edit/ABBA - Select Slices.md) - Adds slices to the current selection, by index. Already selected slices stay selected. Most commands act on th
+- [ABBA - Set Atlas Slicing Angles](Edit/ABBA - Set Atlas Slicing Angles.md) - Sets the angles at which the atlas is sliced, for all slices of the session: the correction for a cutting plan
+- [ABBA - Set Key Slices](Edit/ABBA - Set Key Slices.md) - Marks slices as key slices (or unmarks them). Key slices keep their position when ABBA - Distribute Slices spa
 - [ABBA - Set Slice Background](Edit/ABBA - Set Slice Background.md) - For brightfield images with a white background: the area outside of the selected slices images is filled with 
 - [ABBA - Set Slices Min Max Display Range](Edit/ABBA - Set Slices Min Max Display Range.md) - Sets the display range (min and max displayed values) of channels of the selected slices. Besides the display,
 - [ABBA - Set Slices Thickness (fill gaps)](Edit/ABBA - Set Slices Thickness (fill gaps).md) - Sets the thickness of each selected slice so that it extends halfway to its neighbors, leaving no gap between 
 - [ABBA - Set Slices Thickness](Edit/ABBA - Set Slices Thickness.md) - Sets the thickness of the selected slices along the slicing axis. It affects the 3D display (reconstructed bra
-- [ABBA - Undo or Redo](Edit/ABBA - Undo or Redo.md) - Undoes (or redoes) the last user actions of a session, as Ctrl+Z (Ctrl+Shift+Z) does in the ABBA window. One c
+- [ABBA - Undo or Redo](Edit/ABBA - Undo or Redo.md) - Undoes (or redoes) the last user actions of a session, as Ctrl+Z (Ctrl+Shift+Z) does in the ABBA window. One s
 - [ABBA - Export Atlas Coordinates of Original Slices to ImageJ](Export/ABBA - Export Atlas Coordinates of Original Slices to ImageJ.md) - For each selected slice, exports a 3-channel (x, y, z) 32-bit ImageJ image with the same pixels as the origina
 - [ABBA - Export Atlas to ImageJ](Export/ABBA - Export Atlas to ImageJ.md) - Exports the atlas section at the position of each selected slice as an ImageJ image, one plane per slice, with
 - [ABBA - Export Original Slices to ImageJ](Export/ABBA - Export Original Slices to ImageJ.md) - Opens in ImageJ the original, unregistered image of each selected slice, at the chosen resolution level. Fails
@@ -66,7 +70,7 @@ Run them by title with `fiji_module_run`. One file per command, in a folder name
 - [ABBA - Import With Bio-Formats](Import/ABBA - Import With Bio-Formats.md) - Imports images from Bio-Formats compatible files (vsi, czi, ome.tiff, lif...) as slices. Each image series of 
 - [ABBA - Get State](Inspect/ABBA - Get State.md) - Returns the state of slices as JSON: the content of a state file, plus, per slice, its index, name, channel na
 - [ABBA - Snapshot](Inspect/ABBA - Snapshot.md) - Renders slices with the atlas region borders at their current registration, independently of the window: a hea
-- [Open Atlas](Atlas/Open Atlas.md) - **Dynamic command**: its choices and defaults are computed when it starts. Call `fiji_module_describe` with it
+- [Open Atlas](Atlas/Open Atlas.md) - Opens a brain atlas, the first step of an ABBA session: its output is the input 'ba' of 'ABBA - ABBA Start' an
 - [DeepSlice Info](DeepSlice/DeepSlice Info.md) - Opens the DeepSlice guide website in a web browser.
 - [DisplaySettingsCommand](_no_menu/DisplaySettingsCommand.md) - Sets the display settings (range and color) of a channel of the slices selected in the slices table. **Dynamic
 - [AtlasAdjustDisplayCommand](_no_menu/AtlasAdjustDisplayCommand.md) - **Dynamic command**: its choices and defaults are computed when it starts. Call `fiji_module_describe` with it

@@ -18,5 +18,6 @@ Starts ABBA in a BigDataViewer window, with an atlas sliced along the chosen ori
 
 ## Outputs
 
+- `mp` (MultiSlicePositioner): The ABBA session (MultiSlicePositioner) shown in the window, used by the other ABBA commands.
 - `view` (BdvMultislicePositionerView): The ABBA BigDataViewer view; its aligner (MultiSlicePositioner) is used by the other ABBA commands.
 
