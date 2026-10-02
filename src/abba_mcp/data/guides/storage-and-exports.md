@@ -24,7 +24,9 @@
 1. **Regions onto the original images** (no image is deformed, fastest):
    `ABBA - Export Registrations To QuPath Project` writes, per image entry, `ABBA-RoiSet-<atlas>.zip` and
    `ABBA-Transform-<atlas>.json`, plus the atlas ontology next to the project (do not delete it). In QuPath,
-   the ABBA extension imports them (`AtlasTools.loadWarpedAtlasAnnotations`). Also
+   the ABBA extension imports them (`AtlasTools.loadWarpedAtlasAnnotations`). Slices opened from files (one
+   series of a 2D file, Bio-Formats) have no QuPath project: `ABBA - Export Slices To New QuPath Project` creates
+   one (QuPath 0.7, empty or new folder) with the images and the same files. Also
    `ABBA - Export Regions To File` (ROI set per slice, without QuPath) and `ABBA - Export Regions To Roi Manager`.
 2. **Rasterized images in atlas space**: `ABBA - Export Registered Slices to ImageJ` and
    `ABBA - Export Atlas to ImageJ`, with the same `pixel_size_um` and ROI so that they overlay. Start coarse

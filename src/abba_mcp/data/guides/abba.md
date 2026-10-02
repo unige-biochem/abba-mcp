@@ -34,7 +34,7 @@ coordinates, exports). Commands: `../commands/INDEX.md`.
 | 7. Affine | `ABBA - Elastix Registration (Affine)` |
 | 8. Spline (once or twice) | `ABBA - Elastix Registration (Spline)` |
 | 9. Check | `ABBA - Snapshot` on all slices, then on doubtful ones without labels |
-| 10. Save, export | `ABBA - Save State`, `ABBA - Export Registrations To QuPath Project`, `fiji_module_script` |
+| 10. Save, export | `ABBA - Save State`, `ABBA - Export Registrations To QuPath Project` (or `ABBA - Export Slices To New QuPath Project` for slices opened from files), `fiji_module_script` |
 
 A complete, tested run of steps 1-9 on demo data: `../examples/abba_demo_pipeline.groovy`.
 

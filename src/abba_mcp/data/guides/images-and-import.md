@@ -17,7 +17,8 @@
 - `ABBA - Import QuPath Project`: `qupath_project`, `first_slice_position_mm`, `slice_spacing_mm` (not 0; a
   negative value reverses the order). Positions use the displayed convention (0 = front of the atlas).
   Advanced options of the QuPath dataset (plane origin, RGB split) are not inputs of this command.
-- `ABBA - Import With Bio-Formats`: files directly, when there is no QuPath project.
+- `ABBA - Import With Bio-Formats`: files directly, when there is no QuPath project. The results can still go
+  to QuPath: `ABBA - Export Slices To New QuPath Project` creates the project afterwards.
 - Demo data: `ABBA - Open Demo Slices From ZENODO` (1 to 7 slides, cached locally) or
   `ABBA - Open Demo Slices From OMERO` (25 or 97 sections, public OMERO server).
 - Slide scanner files (e.g. `.vsi`) also contain a label, an overview and a macro image: they become extra,

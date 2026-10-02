@@ -9,3 +9,17 @@ atlas, look at the result, and save the session as a replayable Groovy pipeline.
   Fiji's MCP server listens on 127.0.0.1:9090 only.
 - Docs for the assistant: `src/abba_mcp/data/` (instructions, guides, one file per command, examples).
 - What the assistant sees (snapshots, slice state) goes to your AI provider.
+
+**Works only where `sc.fiji:fiji-llm` and `ch.unige.biochem:fiji-modules` are in the local Maven repository**:
+neither is published yet. Everything else in `env/jgo.toml` is a release.
+
+## Releasing for a new ABBA version
+
+1. Set the ABBA version in `src/abba_mcp/env/jgo.toml`, then check that the environment resolves what ABBA
+   declares: `build/check_env.sh src/abba_mcp/env <ABBA pom.xml>`.
+2. Regenerate the command docs: run `build/gen_commands.groovy` in that environment's Fiji (for instance through
+   `fiji_module_run`) with `outDir` an empty folder, and copy the result over `src/abba_mcp/data/commands/`.
+   Mention new commands in the guides where they belong.
+3. Update `src/abba_mcp/data/environment.md`, and the version in `manifest.json` and `pyproject.toml`.
+4. Run the example pipeline (`src/abba_mcp/data/examples/abba_demo_pipeline.groovy`), then
+   `npx @anthropic-ai/mcpb validate manifest.json` and `npx @anthropic-ai/mcpb pack . abba-fiji-<version>.mcpb`.

@@ -3,7 +3,7 @@
 Menu: `Plugins > BIOP > Atlas > Multi Image To Atlas > Export > ABBA - Export Registrations To QuPath Project`  
 Class: `ch.epfl.biop.atlas.aligner.command.ExportRegistrationToQuPathCommand`
 
-For each selected slice imported from a QuPath project, saves its atlas regions and its registration (ABBA-RoiSet and ABBA-Transform files) in the QuPath project folder of the image. They are then imported in QuPath with the ABBA extension. Slices not imported from a QuPath project are not exported.
+For each selected slice imported from a QuPath project, saves its atlas regions and its registration (ABBA-RoiSet and ABBA-Transform files) in the QuPath project folder of the image. They are then imported in QuPath with the ABBA extension. Slices not imported from a QuPath project are not exported: slices opened from files can be exported with 'ABBA - Export Slices To New QuPath Project'.
 
 ## Inputs
 
