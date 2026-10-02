@@ -18,6 +18,7 @@ import socket
 import subprocess
 import sys
 import time
+from importlib import metadata
 from pathlib import Path
 
 import mcp.types as types
@@ -33,6 +34,21 @@ PORT = 9090
 URL = f"http://127.0.0.1:{PORT}/mcp"
 STATE = Path(os.environ.get("ABBA_MCP_HOME", Path.home() / ".abba-mcp"))
 START_TIMEOUT_S = 1800  # the first start downloads Java, Fiji and ABBA
+
+
+def _pinned(artifact: str) -> str:
+    """The version of an artifact pinned in env/jgo.toml."""
+    m = re.search(rf'"[^":]+:{artifact}:([^"]+)"', (ENV / "jgo.toml").read_text(encoding="utf-8"))
+    return m.group(1) if m else "unknown"
+
+
+# The bundle's version is ABBA's (build/check_env.sh checks it): the docs and examples are for this ABBA only.
+ABBA_VERSION = _pinned("ImageToAtlasRegister")
+FIJI_VERSION = _pinned("fiji")
+try:
+    BUNDLE_VERSION = metadata.version("abba-fiji-mcp")
+except metadata.PackageNotFoundError:
+    BUNDLE_VERSION = "unknown"
 
 # The Fiji tools, forwarded as they are. Defined here so that the assistant sees them before Fiji runs.
 FIJI_TOOLS = {
@@ -109,9 +125,14 @@ def _start_fiji(gui: bool):
                             creationflags=flags, start_new_session=os.name != "nt")
 
 
+_verified = False  # the Fiji on PORT runs the ABBA version of this bundle
+
+
 async def _ensure_fiji(gui: bool):
+    global _verified
     if _port_open():
         return
+    _verified = False
     process = _start_fiji(gui)
     t0 = time.time()
     while time.time() - t0 < START_TIMEOUT_S:
@@ -128,15 +149,39 @@ async def _ensure_fiji(gui: bool):
 
 async def _forward(name: str, arguments: dict, gui: bool):
     await _ensure_fiji(gui)
+    # Refusals are raised after the connection closes: raised inside it, they reach the client as a bare TaskGroup error
+    problem = None
     async with streamablehttp_client(URL, timeout=30, sse_read_timeout=3600) as (read, write, _):
         async with ClientSession(read, write) as session:
             await session.initialize()
             listed = {t.name for t in (await session.list_tools()).tools}
             if name not in listed:
-                raise RuntimeError(f"Port {PORT} answers but it is not ABBA's Fiji (no {name}): "
-                                   "close the other Fiji that uses its MCP server, then retry.")
-            result = await session.call_tool(name, {k: str(v) for k, v in (arguments or {}).items()})
-            return result.content
+                problem = (f"Port {PORT} answers but it is not ABBA's Fiji (no {name}): "
+                           "close the other Fiji that uses its MCP server, then retry.")
+            else:
+                problem = await _version_problem(session)
+            if problem is None:
+                result = await session.call_tool(name, {k: str(v) for k, v in (arguments or {}).items()})
+                return result.content
+    raise RuntimeError(problem)
+
+
+async def _version_problem(session):
+    """Why the Fiji on PORT is not this bundle's ABBA version (such as the user's own Fiji), or None."""
+    global _verified
+    if _verified:
+        return None
+    result = await session.call_tool("fiji_module_describe", {"id": "ABBA - Save State"})
+    text = "".join(c.text for c in result.content if getattr(c, "type", "") == "text")
+    try:
+        running = json.loads(text).get("provided_by") or "an unknown ABBA version"
+    except ValueError:
+        running = "no ABBA"
+    if running != f"ch.epfl.biop:ImageToAtlasRegister:{ABBA_VERSION}":
+        return (f"The Fiji on port {PORT} runs {running}, but this server and its docs are for ABBA {ABBA_VERSION}. "
+                f"Ask the user to close that Fiji, then retry: this server then starts ABBA {ABBA_VERSION}.")
+    _verified = True
+    return None
 
 
 # -- docs --
@@ -173,20 +218,24 @@ MODES = {
 
 def instructions(gui: bool = True) -> str:
     text = (DATA / "instructions.md").read_text(encoding="utf-8")
-    return text.replace("{DOCS}", DATA.as_posix()).replace("{MODE}", MODES[gui])
+    return (text.replace("{DOCS}", DATA.as_posix()).replace("{MODE}", MODES[gui])
+            .replace("{ABBA_VERSION}", ABBA_VERSION).replace("{BUNDLE_VERSION}", BUNDLE_VERSION)
+            .replace("{FIJI_VERSION}", FIJI_VERSION))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="ABBA in Fiji, for AI assistants (MCP, stdio).")
     parser.add_argument("--headless", action="store_true", help="start Fiji without a window")
     parser.add_argument("--print-instructions", action="store_true")
+    parser.add_argument("--version", action="version",
+                        version=f"abba-fiji {BUNDLE_VERSION} (ABBA {ABBA_VERSION}, Fiji {FIJI_VERSION})")
     args = parser.parse_args()
     gui = not (args.headless or os.environ.get("ABBA_MCP_HEADLESS", "").lower() in ("1", "true", "yes"))
     if args.print_instructions:
         print(instructions(gui))
         return 0
 
-    server = Server("abba-mcp", instructions=instructions(gui))
+    server = Server("abba-fiji", version=BUNDLE_VERSION, instructions=instructions(gui))
 
     @server.list_tools()
     async def list_tools() -> list[types.Tool]:

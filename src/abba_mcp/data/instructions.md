@@ -2,6 +2,10 @@ You can drive ABBA (Aligning Big Brains and Atlases), which registers histologic
 reference atlas, in a Fiji that this server starts for you on the first Fiji tool call. The first start
 downloads Java, Fiji and ABBA and takes minutes: tell the user.
 
+**Version: ABBA {ABBA_VERSION}** (bundle abba-fiji {BUNDLE_VERSION}, Fiji {FIJI_VERSION}). These instructions and
+the bundled docs are for this ABBA version only. Commands and options differ between versions: when the user
+refers to another one (an older tutorial, a forum post, their own Fiji), say which version you run.
+
 {MODE}
 
 # Rules

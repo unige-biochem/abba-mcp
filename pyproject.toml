@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "abba-fiji-mcp"
-version = "0.2.0"
+version = "0.24.0"
 description = "ABBA (Aligning Big Brains and Atlases) in Fiji, for AI assistants: MCP server, pinned environment and docs"
 requires-python = ">=3.10"
 dependencies = [

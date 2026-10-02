@@ -2,7 +2,7 @@
   "manifest_version": "0.4",
   "name": "abba-fiji",
   "display_name": "ABBA (Fiji)",
-  "version": "0.2.0",
+  "version": "0.24.0",
   "description": "Register brain sections to atlases with ABBA in Fiji, driven by your assistant",
   "long_description": "Starts ABBA (Aligning Big Brains and Atlases) in a pinned Fiji the first time it is needed, and lets the assistant run ABBA's commands, look at rendered snapshots and save the session as a replayable Groovy pipeline. Bundles version-matched documentation. Experimental (codename sextant).",
   "author": { "name": "Nicolas Chiaruttini", "url": "https://github.com/NicoKiaru" },
