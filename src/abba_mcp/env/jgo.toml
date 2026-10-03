@@ -16,7 +16,7 @@ coordinates = [
     "org.eclipse.jetty:jetty-security:11.0.20",
     # ABBA's pom pins atlas, biop-tools, image-loaders and bdv-playground. An override goes after ABBA:
     # listed first, an artifact's own dependencies win (build/check_env.sh guards against that).
-    "ch.epfl.biop:ImageToAtlasRegister:0.24.0",
+    "ch.epfl.biop:ImageToAtlasRegister:0.24.1-SNAPSHOT",
     "sc.fiji:fiji:2.18.0",
     "sc.fiji:fiji-llm:0.1.0-SNAPSHOT",
     "ch.unige.biochem:fiji-modules:0.1.0-SNAPSHOT",

@@ -32,10 +32,9 @@ def notSections = mp.getSlices().findIndexValues { !it.getName().contains('10x')
 if (notSections) modules.run(command.getCommand(ch.epfl.biop.atlas.aligner.command.DeleteSlicesCommand), true, [mp: mp, slices_csv: notSections]).get()
 
 modules.run(command.getCommand(ch.epfl.biop.atlas.aligner.command.SetSlicesSelectedCommand), true, [mp: mp, slices_csv: '*']).get()
-modules.run(command.getCommand(ch.epfl.biop.atlas.aligner.command.SetSlicesDisplayRangeCommand), true, [
-    mp: mp, slice_channels_csv: '0', display_min: 0.0d, display_max: 800.0d]).get()
-modules.run(command.getCommand(ch.epfl.biop.atlas.aligner.command.SetSlicesDisplayRangeCommand), true, [
-    mp: mp, slice_channels_csv: '1', display_min: 0.0d, display_max: 1024.0d]).get()
+// DeepSlice receives the slices as displayed: no saturation
+modules.run(command.getCommand(ch.epfl.biop.atlas.aligner.command.AutoDisplayRangeCommand), true, [
+    mp: mp, slice_channels_csv: '0,1', low_percentile: 0.1d, high_percentile: 99.9d, same_range_for_all_slices: true]).get()
 
 modules.run(command.getCommand(ch.epfl.biop.atlas.aligner.command.RegisterSlicesDeepSliceApposeCommand), true, [
     mp: mp, model: 'mouse', slice_channels_csv: '0,1', allow_slicing_angle_change: true, pixel_size_um: 30.0d,

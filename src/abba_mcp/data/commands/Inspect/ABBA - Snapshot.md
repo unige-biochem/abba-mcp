@@ -8,13 +8,15 @@ Renders slices with the atlas region borders at their current registration, inde
 ## Inputs
 
 - `atlas_channel` (int) **Atlas channel**, default `-1`
-  Index of an atlas channel blended with the slice, -1 for none.
+  Index of an atlas channel blended with the slice, -1 for none ('atlas_channels' in 'ABBA - Get State' lists them in index order).
 - `columns` (int) **Columns**, default `0`
   Tiles per row when several slices are rendered, 0 for automatic.
 - `mp` (MultiSlicePositioner) **ABBA session**
   The ABBA session to render.
 - `pixel_size_mm` (double) **Pixel size (mm)**, default `0.025`
   Pixel size of the rendered image; smaller is sharper and slower.
+- `region_mm` (String) **Region (mm)**, optional
+  Rendered region 'x,y,width,height' in mm, x and y being its top left corner as read on the rulers (e.g. '-1,0.5,2,2' for a 2 mm square). Empty for the whole region of interest. With a small region, lower the pixel size to see details.
 - `show_region_borders` (boolean) **Show region borders**, default `true`
 - `show_region_labels` (boolean) **Show region labels**, default `true`
 - `slices_csv` (String) **Slices**, optional

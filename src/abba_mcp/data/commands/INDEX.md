@@ -29,6 +29,7 @@ Run them by title with `fiji_module_run`. One file per command, in a folder name
 - [ABBA - Un-Mirror Slices](Align/ABBA - Un-Mirror Slices.md) - Removes the mirroring of the selected slices, made with 'Mirror Slices', while keeping the registrations done 
 - [ABBA - Get Prompt for Methods Writing](Cite/ABBA - Get Prompt for Methods Writing.md) - Generates a prompt describing how the selected slices were registered (atlas, slicing angles, positions, regis
 - [ABBA - How to cite](Cite/ABBA - How to cite.md) - Shows how to cite ABBA and the tools it uses, in a window (requires an internet connection).
+- [ABBA - Auto Display Range](Edit/ABBA - Auto Display Range.md) - Sets the display range of channels of the selected slices from percentiles of their pixel values, measured on 
 - [ABBA - Delete Slices](Edit/ABBA - Delete Slices.md) - Removes slices from the session, as the delete action of the ABBA window does. No file is touched, and undo re
 - [ABBA - Deselect Slices](Edit/ABBA - Deselect Slices.md) - Removes slices from the current selection, by index. Other slices keep their selection state.
 - [ABBA - Distribute Slices](Edit/ABBA - Distribute Slices.md) - Spaces the selected slices evenly along the slicing axis, as 'Distribute Slices [D]' does in the ABBA window. 
@@ -69,7 +70,7 @@ Run them by title with `fiji_module_run`. One file per command, in a folder name
 - [ABBA - Import Sources](Import/ABBA - Import Sources.md) - Imports BigDataViewer-Playground sources as a single slice: each source becomes one channel of the slice.
 - [ABBA - Import Standardized ABBA Project (Zip)](Import/ABBA - Import Standardized ABBA Project (Zip).md) - Opens a standardized ABBA project zip, created with 'Export Standardized ABBA Project (Zip)', in a new ABBA wi
 - [ABBA - Import With Bio-Formats](Import/ABBA - Import With Bio-Formats.md) - Imports images from Bio-Formats compatible files (vsi, czi, ome.tiff, lif...) as slices. Each image series of 
-- [ABBA - Get State](Inspect/ABBA - Get State.md) - Returns the state of slices as JSON: the content of a state file, plus, per slice, its index, name, channel na
+- [ABBA - Get State](Inspect/ABBA - Get State.md) - Returns the state of the session as JSON, once the queued work is done. Compact by default: the atlas, its cha
 - [ABBA - Snapshot](Inspect/ABBA - Snapshot.md) - Renders slices with the atlas region borders at their current registration, independently of the window: a hea
 - [Open Atlas](Atlas/Open Atlas.md) - Opens a brain atlas, the first step of an ABBA session: its output is the input 'ba' of 'ABBA - ABBA Start' an
 - [DeepSlice Info](DeepSlice/DeepSlice Info.md) - Opens the DeepSlice guide website in a web browser.

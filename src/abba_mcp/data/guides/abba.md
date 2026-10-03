@@ -5,7 +5,19 @@ along the atlas slicing axis, then a stack of in-plane registrations (affine, sp
 onto it. The result is used to assign brain regions to cells, usually in QuPath.
 
 See also: `images-and-import.md` (calibration, formats, display), `storage-and-exports.md` (state files,
-coordinates, exports). Commands: `../commands/INDEX.md`.
+coordinates, exports), `window.md` (the ABBA window, working with the user in it). Commands: `../commands/INDEX.md`.
+
+## How the tools work
+
+- Every ABBA action is a SciJava command, run by its title with `fiji_module_run(id, inputs)`, where `inputs` is a
+  JSON object. `fiji_module_describe` gives a command's inputs, defaults and choices, and the version providing it.
+- Commands never open a dialog for you: inputs not given keep their default. An object input (the ABBA session `mp`,
+  the atlas `ba`) with a single live instance is filled in, otherwise pass its name: `fiji_objects` counts the live
+  objects per type, and lists one type by name (e.g. `MultiSlicePositioner`).
+- **Commands act on the session, never on a window.** A window (there may be several) shows the session to the user.
+  Point at slices with the selection, which every window draws; look at a window with `fiji_ui_screenshot`.
+- Registration commands queue work and return at once. `ABBA - Get State` and `ABBA - Snapshot` wait for the queued
+  work: use them to know when it is done and how it went.
 
 ## Before starting: ask the user
 
@@ -29,11 +41,11 @@ coordinates, exports). Commands: `../commands/INDEX.md`.
 | 2. Import | `ABBA - Import QuPath Project` (preferred), `ABBA - Import With Bio-Formats`; demo: `ABBA - Open Demo Slices From ZENODO` |
 | 3. Remove non-sections | `ABBA - Get State` (names), ask, `ABBA - Delete Slices` |
 | 4. Orientation | `ABBA - Rotate` (Z any angle; X/Y only ±180 = flip), `ABBA - Mirror Slices` for hemi-sections |
-| 5. Display ranges (DeepSlice only) | `ABBA - Set Slices Min Max Display Range`: no saturation |
+| 5. Display ranges (DeepSlice only) | `ABBA - Auto Display Range` (percentiles, no saturation), or `ABBA - Set Slices Min Max Display Range` |
 | 6. Position + slicing angle | `ABBA - DeepSlice Registration`, on all slices of the animal at once |
 | 7. Affine | `ABBA - Elastix Registration (Affine)` |
 | 8. Spline (once or twice) | `ABBA - Elastix Registration (Spline)` |
-| 9. Check | `ABBA - Snapshot` on all slices, then on doubtful ones without labels |
+| 9. Check | `ABBA - Snapshot` on all slices, then on doubtful ones without labels, zoomed with `region_mm` |
 | 10. Save, export | `ABBA - Save State`, `ABBA - Export Registrations To QuPath Project` (or `ABBA - Export Slices To New QuPath Project` for slices opened from files), `fiji_module_script` |
 
 A complete, tested run of steps 1-9 on demo data: `../examples/abba_demo_pipeline.groovy`.
@@ -42,7 +54,8 @@ A complete, tested run of steps 1-9 on demo data: `../examples/abba_demo_pipelin
 
 - **Channels are paired in order** for Elastix: `atlas_channels_csv` `0,1` with `slice_channels_csv` `0,1`
   pairs atlas channel 0 (Nissl for Allen) with slice channel 0 (e.g. DAPI) and atlas channel 1 (Ara,
-  autofluorescence-like) with slice channel 1. Lists must have the same length; `*` is not accepted; a channel
+  autofluorescence-like) with slice channel 1. The atlas channels in index order are `atlas_channels` in
+  `ABBA - Get State`. Lists must have the same length; `*` is not accepted; a channel
   may be repeated; each pair weighs equally. Selected slice channels must share a pixel type.
 - **Elastix affine** `pixel_size_um` 40 is a good start. **Spline** `nb_control_points_x` 5 to 20 (more is
   more flexible and risks overfitting where tissue and atlas differ; 12 to 15 is common), `pixel_size_um` 20.
@@ -59,12 +72,10 @@ A complete, tested run of steps 1-9 on demo data: `../examples/abba_demo_pipelin
 - **Selection.** Most commands act on the *selected* slices. `ABBA - Select Slices` adds to the selection,
   `ABBA - Deselect Slices` removes. Indices are 0-based along the slicing axis and **change when a slice moves**:
   re-read the state after DeepSlice or any move.
-- **Queued work.** Registration commands return at once and run in the background (in parallel).
-  `ABBA - Get State` and `ABBA - Snapshot` wait until the queue is empty: use them before judging or saving.
 - **Labels are not observations.** A snapshot draws the atlas at the slice's current position. After an
   import that position is a placeholder (`reg=0` in the header). Turn labels and borders off to see the tissue.
 - **Positions come in two conventions**: `z_mm` (displayed, atlas convention, 0 = front of the atlas) and
-  `slicing_axis_position` (stored in state files). Both are in `ABBA - Get State`.
+  `slicing_axis_position` (stored in state files). `ABBA - Get State` gives `z_mm`, and both with `full`.
 - **Registrations stack per slice** and apply in sequence. `ABBA - Remove Last Registration` pops one per
   selected slice (positions are not affected). `ABBA - Undo or Redo` undoes whole commands: one step reverts
   a registration of all the slices it ran on. The atlas slicing angles are not undone.

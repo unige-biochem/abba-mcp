@@ -11,11 +11,12 @@ for a in bigdataviewer-biop-tools bigdataviewer-image-loaders bigdataviewer-play
   got=$(printf '%s\n' "$deps" | grep -oE ":$a:[^: ]+" | head -1 | cut -d: -f3)
   if [ "$want" = "$got" ]; then echo "ok   $a $got"; else echo "FAIL $a resolved $got, ABBA declares $want"; status=1; fi
 done
-# The bundle's version is ABBA's, plus "+N" for a re-release of the bundle alone (e.g. 0.24.0+1)
+# The bundle's version is ABBA's, plus "+N" for a re-release of the bundle alone (e.g. 0.24.0+1).
+# Python spells a SNAPSHOT ".dev0": 0.24.1-SNAPSHOT in manifest.json is 0.24.1.dev0 in pyproject.toml.
 root="$(dirname "$0")/.."
 abba=$(grep -oE 'ImageToAtlasRegister:[^"]+' "$1/jgo.toml" | cut -d: -f2)
 manifest=$(grep -m1 -E '^\s*"version"' "$root/manifest.json" | cut -d'"' -f4)
 project=$(grep -m1 -E '^version\s*=' "$root/pyproject.toml" | cut -d'"' -f2)
-if [ "${manifest%%+*}" = "$abba" ] && [ "$project" = "$manifest" ]; then echo "ok   bundle version $manifest, ABBA $abba"
+if [ "${manifest%%+*}" = "$abba" ] && [ "$project" = "${manifest/-SNAPSHOT/.dev0}" ]; then echo "ok   bundle version $manifest, ABBA $abba"
 else echo "FAIL bundle version: manifest.json $manifest, pyproject.toml $project, ABBA $abba"; status=1; fi
 exit $status

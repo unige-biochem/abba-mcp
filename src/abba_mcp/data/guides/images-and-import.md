@@ -29,6 +29,7 @@
 - They matter for **DeepSlice only**: slices are sent to it as 8-bit RGB with their current colour and
   min/max. Saturation ruins the result; ABBA itself warns that almost half of the images users send to
   DeepSlice are over-saturated. Elastix does not use display settings.
-- Set them with `ABBA - Set Slices Min Max Display Range` per channel. To choose values, render one slice
-  (`ABBA - Snapshot` without borders and labels) and look: tissue should be clearly visible, not clipped.
+- `ABBA - Auto Display Range` sets them from percentiles of the pixel values (0.1 to 99.9 by default), one range
+  per channel for all the selected slices. `ABBA - Set Slices Min Max Display Range` sets given values. Then render
+  one slice (`ABBA - Snapshot` without borders and labels) and look: tissue clearly visible, not clipped.
 - Brightfield: also `ABBA - Set Slice Background`.
