@@ -9,7 +9,7 @@ session, never on a view: what a command changes shows in every view. A session 
 
 Title: `Aligning Big Brains and Atlases - <atlas name>`, then ` (view 2)`, ` (view 3)`... for further views of the
 same session, with `* (modified)` appended while there are unsaved changes. The title without that marker is the
-view's name in `fiji_objects`. It changes, so read it with `fiji_ui_windows_read` just before `fiji_ui_screenshot`. The window opens
+view's name in `fiji_objects`. `abba_window_picture` takes the title or its start (`fiji_ui_windows_read` lists them). The window opens
 maximized: the viewer on the left, the cards on the right (about 600 px).
 
 Drawn on the viewer: top left, the current slice's name (`[Key]` for a key slice), `Z: <mm> mm (Thickness: <um> um)`
@@ -94,11 +94,11 @@ Not commands, but equivalent: `Slices > Remove Slices` (`ABBA - Delete Slices`),
   view (green handles, selected table rows); the current slice belongs to one view and commands cannot see it.
   Ask the user to select the slices they mean, then read `selected` in `ABBA - Get State`; or select with
   `ABBA - Select Slices` and tell them to look for the green handles. The table's `#` is the command index.
-- **Look** with `fiji_ui_windows_read` (title), then `fiji_ui_screenshot` (exact `window_title`;
-  `activate_and_restore` to bring it forward, which the system may refuse). It captures screen pixels: a window on
-  top of it shows instead, possibly another application of the user; a locked screen gives black; headless gives
-  nothing. Check that the picture is the ABBA window before describing it. The mouse-pointer overlays appear in it. To judge a registration, prefer `ABBA - Snapshot`, which does not
-  depend on the window.
+- **Look** with `abba_window_picture` (the title or its start, default the first ABBA window;
+  `fiji_ui_windows_read` lists the titles). It draws the window into a picture, so it is right when the window is
+  covered or the screen is locked, and never shows another application; it does not show the mouse pointer, nor
+  dialogs (separate windows: picture them by title). It is left out of `fiji_module_script`. To judge a
+  registration, prefer `ABBA - Snapshot`, which does not depend on the window and its zoom.
 - **Error and warning messages** reach you first, in the run's `messages` (or its error), then the user in a
   dialog of the window; the command does not wait for the dialog. `fiji_ui_dialogs_read` lists the dialogs still
   open; close one for the user only if they ask.

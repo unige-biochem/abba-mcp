@@ -15,7 +15,7 @@ coordinates, exports), `window.md` (the ABBA window, working with the user in it
   the atlas `ba`) with a single live instance is filled in, otherwise pass its name: `fiji_objects` counts the live
   objects per type, and lists one type by name (e.g. `MultiSlicePositioner`).
 - **Commands act on the session, never on a window.** A window (there may be several) shows the session to the user.
-  Point at slices with the selection, which every window draws; look at a window with `fiji_ui_screenshot`.
+  Point at slices with the selection, which every window draws; look at a window with `abba_window_picture`.
 - Registration commands queue work and return at once. `ABBA - Get State` and `ABBA - Snapshot` wait for the queued
   work: use them to know when it is done and how it went.
 
