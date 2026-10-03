@@ -3,7 +3,7 @@
 Menu: `Plugins > BIOP > Atlas > Multi Image To Atlas > ABBA - Define Rectangular ROI`  
 Class: `ch.epfl.biop.atlas.aligner.gui.bdv.card.SliceDefineROICommand`
 
-Defines the rectangular region of interest (ROI) of the sections: registrations only consider this region, and exports to images are cropped to it. It applies to all slices.
+Defines the rectangular region of interest (ROI) of the sections: registrations only consider this region, and exports to images are cropped to it. It applies to all slices. Needs an ABBA window: 'ABBA - Set Region Of Interest' does the same without one.
 
 **Dynamic command**: its choices and defaults are computed when it starts. Call `fiji_module_describe` with its title to see them.
 

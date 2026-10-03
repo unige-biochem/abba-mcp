@@ -39,8 +39,8 @@ right-click menu.
 | Slices Display | Current slice name and info; a table, one row per slice: `#` (index as in the commands, name, `(Key)`), `Vis.`, then per channel `Ch_i` (visibility) and an unnamed column (colour and range). Selecting rows selects slices. Clicking a column header applies to the selected rows. Double-click a name: it becomes the current slice. `Filter by name` field. |
 | Display & Navigation | `Review` / `Positioning`; `Display One Slice Only (fast)` / `Display All Slices` (positioning only); `Change Overlap Mode` and overlap size sliders; `Previous [Left]`, `Center Current [C]`, `Next [Right]`; `View Previous [P]` / `View Next [N]`. |
 | Edit Selected Slices | Rotate 90° clockwise or counter-clockwise, flip around X or Y (as `ABBA - Rotate`), `Distribute Spacing` (as `ABBA - Distribute Slices`). |
-| Atlas Slicing | `Lock rotations`, `X rotation (degrees)` and `Y rotation (degrees)` sliders (±45): the interactive form of `ABBA - Adjust Slicing`. |
-| Define Region Of Interest | Collapsed at start. X, Y, Width, Height (mm), `Define Interactively` (draw it in the viewer), `Full Size`: `ABBA - Define Rectangular ROI`. |
+| Atlas Slicing | `Lock rotations`, `X rotation (degrees)` and `Y rotation (degrees)` sliders (±45): the interactive form of `ABBA - Adjust Slicing`. You: `ABBA - Set Atlas Slicing Angles`. |
+| Define Region Of Interest | Collapsed at start. X, Y, Width, Height (mm), `Define Interactively` (draw it in the viewer), `Full Size`: `ABBA - Define Rectangular ROI`. You: `ABBA - Set Region Of Interest`. |
 
 `View > Cards > Add Resources Monitor` adds a CPU and memory card.
 
@@ -95,12 +95,13 @@ Not commands, but equivalent: `Slices > Remove Slices` (`ABBA - Delete Slices`),
   Ask the user to select the slices they mean, then read `selected` in `ABBA - Get State`; or select with
   `ABBA - Select Slices` and tell them to look for the green handles. The table's `#` is the command index.
 - **Look** with `fiji_ui_windows_read` (title), then `fiji_ui_screenshot` (exact `window_title`;
-  `component_path` from `fiji_ui_controls_read` to crop to the viewer or a card; `activate_and_restore` to bring it
-  forward). It captures screen pixels: windows on top show, a locked screen gives black, headless gives nothing.
-  The mouse-pointer overlays appear in it. To judge a registration, prefer `ABBA - Snapshot`, which does not
+  `activate_and_restore` to bring it forward, which the system may refuse). It captures screen pixels: a window on
+  top of it shows instead, possibly another application of the user; a locked screen gives black; headless gives
+  nothing. Check that the picture is the ABBA window before describing it. The mouse-pointer overlays appear in it. To judge a registration, prefer `ABBA - Snapshot`, which does not
   depend on the window.
-- **Error and warning messages** of a session with a window are modal dialogs: the command that raised one waits
-  until it is closed. If a run does not return, check `fiji_ui_dialogs_read`.
+- **Error and warning messages** reach you first, in the run's `messages` (or its error), then the user in a
+  dialog of the window; the command does not wait for the dialog. `fiji_ui_dialogs_read` lists the dialogs still
+  open; close one for the user only if they ask.
 - **Interactive commands** return at once: the window opens when the slices' queued work reaches it, one at a
   time (a lock serialises manual editions). `ABBA - Get State` waits until the user has finished; run it with
   a short `wait_seconds`, then follow the job id with `fiji_module_status`. Or watch `fiji_ui_windows_read`.
@@ -167,5 +168,5 @@ shown = slice.getName()
 | `void centerOnAtlas()`, `void centerOnAtlas(double atlasZ)` | Fits an atlas section (middle, or at `atlasZ`, displayed convention) to the window |
 | `void viewPreviousRegistration()`, `void viewNextRegistration()`, `void toggleOverlap()` | P, N, O |
 | `void saveState(File stateFileIn)` | State plus view file; refuses an existing file (with a dialog) |
-| `void setBlockingMessages(boolean blocking)` | `false`: errors and warnings go to the viewer overlay instead of modal dialogs |
+| `void setBlockingMessages(boolean blocking)` | `false`: errors and warnings go to the viewer overlay instead of dialogs (neither blocks the command) |
 | `MultiSlicePositioner msp` (field), `BdvHandle getBdvh()` | The session; the BigDataViewer handle |

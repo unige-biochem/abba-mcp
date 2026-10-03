@@ -3,7 +3,7 @@
 Menu: `Plugins > BIOP > Atlas > Multi Image To Atlas > Inspect > ABBA - Get State`  
 Class: `ch.epfl.biop.atlas.aligner.command.GetStateCommand`
 
-Returns the state of the session as JSON, once the queued work is done. Compact by default: the atlas, its channels in index order, the slicing angles, and per slice its index, name, position 'z_mm' (as displayed), selection, key slice flag, channel names and registrations. With 'full': the content of a state file instead, plus per slice its index, name, channels, selection and position in both conventions ('z_mm' as displayed, 'slicing_axis_position' as stored), long transforms elided.
+Returns the state of the session as JSON, once the queued work is done. Compact by default: the atlas, its channels in index order, the slicing angles, the region of interest, and per slice its index, name, position 'z_mm' (as displayed), selection, key slice flag, channel names and registrations. With 'full': the content of a state file instead, plus per slice its index, name, channels, selection and position in both conventions ('z_mm' as displayed, 'slicing_axis_position' as stored), long transforms elided.
 
 ## Inputs
 

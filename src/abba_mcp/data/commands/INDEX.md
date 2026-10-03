@@ -10,7 +10,7 @@ Run them by title with `fiji_module_run`. One file per command, in a folder name
 - [Create Atlas from Images](Atlas/Create Atlas from Images.md) - A simple way to create an atlas.
 - [ABBA - DeepSlice Registration (Local)](Obsolete/ABBA - DeepSlice Registration (Local).md) - Obsolete, use 'ABBA - DeepSlice Registration' instead. Runs DeepSlice from a user-configured conda environment
 - [ABBA - DeepSlice Registration (Web)](Obsolete/ABBA - DeepSlice Registration (Web).md) - Obsolete, use 'ABBA - DeepSlice Registration' instead. Registers the selected slices with the DeepSlice web in
-- [ABBA - Adjust Slicing](Multi Image To Atlas/ABBA - Adjust Slicing.md) - Tilts the atlas slicing plane to match the sectioning angle of the slices. The angles apply to all slices. **D
+- [ABBA - Adjust Slicing](Multi Image To Atlas/ABBA - Adjust Slicing.md) - Tilts the atlas slicing plane to match the sectioning angle of the slices. The angles apply to all slices. Int
 - [ABBA - Define Rectangular ROI](Multi Image To Atlas/ABBA - Define Rectangular ROI.md) - Defines the rectangular region of interest (ROI) of the sections: registrations only consider this region, and
 - [ABBA - Open Demo Slices From OMERO](Multi Image To Atlas/ABBA - Open Demo Slices From OMERO.md) - Imports demo mouse brain sections streamed from a public OMERO server, through a QuPath project downloaded fro
 - [ABBA - Open Demo Slices From ZENODO](Multi Image To Atlas/ABBA - Open Demo Slices From ZENODO.md) - Imports demo mouse brain sections from whole slide images (vsi) downloaded from Zenodo and cached locally (abo
@@ -40,6 +40,7 @@ Run them by title with `fiji_module_run`. One file per command, in a folder name
 - [ABBA - Select Slices](Edit/ABBA - Select Slices.md) - Adds slices to the current selection, by index. Already selected slices stay selected. Most commands act on th
 - [ABBA - Set Atlas Slicing Angles](Edit/ABBA - Set Atlas Slicing Angles.md) - Sets the angles at which the atlas is sliced, for all slices of the session: the correction for a cutting plan
 - [ABBA - Set Key Slices](Edit/ABBA - Set Key Slices.md) - Marks slices as key slices (or unmarks them). Key slices keep their position when ABBA - Distribute Slices spa
+- [ABBA - Set Region Of Interest](Edit/ABBA - Set Region Of Interest.md) - Sets the rectangular region of interest (ROI) of the session: registrations only consider this region, and exp
 - [ABBA - Set Slice Background](Edit/ABBA - Set Slice Background.md) - For brightfield images with a white background: the area outside of the selected slices images is filled with 
 - [ABBA - Set Slices Min Max Display Range](Edit/ABBA - Set Slices Min Max Display Range.md) - Sets the display range (min and max displayed values) of channels of the selected slices. Besides the display,
 - [ABBA - Set Slices Thickness (fill gaps)](Edit/ABBA - Set Slices Thickness (fill gaps).md) - Sets the thickness of each selected slice so that it extends halfway to its neighbors, leaving no gap between 

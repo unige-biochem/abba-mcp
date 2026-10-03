@@ -3,7 +3,7 @@
 Menu: `Plugins > BIOP > Atlas > Multi Image To Atlas > ABBA - Adjust Slicing`  
 Class: `ch.epfl.biop.atlas.aligner.command.AtlasSlicingAdjusterCommand`
 
-Tilts the atlas slicing plane to match the sectioning angle of the slices. The angles apply to all slices.
+Tilts the atlas slicing plane to match the sectioning angle of the slices. The angles apply to all slices. Interactive, from the Atlas Slicing card of an ABBA window: 'ABBA - Set Atlas Slicing Angles' does the same from a script.
 
 **Dynamic command**: its choices and defaults are computed when it starts. Call `fiji_module_describe` with its title to see them.
 

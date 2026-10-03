@@ -80,8 +80,9 @@ A complete, tested run of steps 1-9 on demo data: `../examples/abba_demo_pipelin
   selected slice (positions are not affected). `ABBA - Undo or Redo` undoes whole commands: one step reverts
   a registration of all the slices it ran on. The atlas slicing angles are not undone.
 - **Broken or missing tissue** registers badly with splines: expect local failures there, and look.
-- **Hemi-sections**: restrict the region with `ABBA - Define Rectangular ROI` (mm, atlas section centred on 0)
-  or mirror before DeepSlice. The ROI also crops exports: restore it afterwards.
+- **Hemi-sections**: restrict the region with `ABBA - Set Region Of Interest` (mm, atlas section centred on 0;
+  `roi_mm` in `ABBA - Get State`) or mirror before DeepSlice. The ROI also crops exports: restore it afterwards
+  (empty `region_mm`).
 - **Brightfield** (white background): `ABBA - Set Slice Background` (about 200-255 for 8-bit) so that areas
   outside the image are not black, which would bias registration.
 - **Loading a state** (`ABBA - Load State`) adds its slices to the current session: start from an empty one,
