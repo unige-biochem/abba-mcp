@@ -28,14 +28,18 @@
     }
   },
   "tools": [
-    { "name": "fiji_module_search", "description": "Find ABBA and Fiji commands" },
-    { "name": "fiji_module_describe", "description": "Describe a command's inputs and outputs" },
-    { "name": "fiji_module_run", "description": "Run a command or script with JSON inputs" },
-    { "name": "fiji_module_status", "description": "Follow a long run" },
-    { "name": "fiji_objects", "description": "List live objects (ABBA sessions, atlases)" },
-    { "name": "fiji_module_script", "description": "Save the session as a Groovy pipeline" },
-    { "name": "abba_docs_search", "description": "Search the bundled docs" },
-    { "name": "abba_docs_read", "description": "Read a bundled doc file" }
+    { "name": "fiji_module_search", "description": "Find SciJava commands and scripts whose title, menu path, description or class contain all the words of the query" },
+    { "name": "fiji_module_describe", "description": "Describe a module's inputs and outputs (types, labels, descriptions, defaults and choices after its initializers ran), the live objects that can fill its object inputs, and the artifact that provides it (provided_by: groupId:artifactId:version)" },
+    { "name": "fiji_module_run", "description": "Run a module (command class, menu path, title, or the path of a script file) with inputs as a JSON object, e.g. {\"sigma\": 2, \"image\": \"blobs.gif\"}" },
+    { "name": "fiji_module_status", "description": "Follow a run started by fiji_module_run: waits up to wait_seconds (default 60) and returns its result, or 'running'" },
+    { "name": "fiji_objects", "description": "The live objects Fiji holds (images, viewers, sessions...): without a type, the number of objects per type; with a type, the objects of that type by the names module inputs accept" },
+    { "name": "fiji_module_script", "description": "The successful fiji_module_run calls of this session as a Groovy script that replays them, every input explicit (modules declaring record=false, which only look, are left out)" },
+    { "name": "fiji_ui_windows_read", "description": "List visible AWT and Swing windows, including titles, classes, bounds, active state, and modality" },
+    { "name": "fiji_ui_dialogs_read", "description": "List visible AWT and Swing dialogs, including each dialog's title, messages, buttons, and modal state" },
+    { "name": "fiji_ui_dialog_respond", "description": "Click an exact enabled button in one visible dialog" },
+    { "name": "abba_window_picture", "description": "Picture of one Fiji window as it is drawn, what the user sees in it: right even when the window is covered or the screen is locked, and never another application" },
+    { "name": "abba_docs_search", "description": "Search the bundled ABBA documentation (guides, one file per command, scripting, examples) with a regular expression; returns matching lines with their file" },
+    { "name": "abba_docs_read", "description": "Read one bundled documentation file, by its path relative to the docs folder (as abba_docs_search gives it)" }
   ],
   "license": "BSD-2-Clause",
   "compatibility": { "runtimes": { "python": ">=3.10" } },

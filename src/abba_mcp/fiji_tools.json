@@ -1,0 +1,148 @@
+[
+  {
+    "name": "fiji_module_search",
+    "description": "Find SciJava commands and scripts whose title, menu path, description or class contain all the words of the query. Every Fiji command and plugin is a module: search here before writing code.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "words that must all appear, e.g. 'gaussian blur'"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "definitions": {}
+    }
+  },
+  {
+    "name": "fiji_module_describe",
+    "description": "Describe a module's inputs and outputs (types, labels, descriptions, defaults and choices after its initializers ran), the live objects that can fill its object inputs, and the artifact that provides it (provided_by: groupId:artifactId:version). id: a class name, menu path, title, or script file path.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "command title, menu path, class name, or script file path"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "definitions": {}
+    }
+  },
+  {
+    "name": "fiji_module_run",
+    "description": "Run a module (command class, menu path, title, or the path of a script file) with inputs as a JSON object, e.g. {\"sigma\": 2, \"image\": \"blobs.gif\"}. Never opens the module's dialog: inputs not given keep their default; an object input with one live instance is bound to it, else pass its name (see fiji_objects). Returns status, outputs (objects by name, pictures as images), new objects, and the warnings and errors logged meanwhile. Waits up to wait_seconds (default 60); a longer run returns a job id for fiji_module_status.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "command title, menu path, class name, or script file path"
+        },
+        "inputs": {
+          "type": "string",
+          "description": "JSON object of input values by name, e.g. {\"sigma\": 2}; inputs not given keep their default"
+        },
+        "wait_seconds": {
+          "type": "string",
+          "description": "seconds to wait before returning a job id instead (default 60)"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "definitions": {}
+    }
+  },
+  {
+    "name": "fiji_module_status",
+    "description": "Follow a run started by fiji_module_run: waits up to wait_seconds (default 60) and returns its result, or 'running'. An empty job lists the runs.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "job": {
+          "type": "string",
+          "description": "the job id returned by fiji_module_run; empty lists the runs"
+        },
+        "wait_seconds": {
+          "type": "string",
+          "description": "seconds to wait for the result (default 60)"
+        }
+      },
+      "required": [
+        "job"
+      ],
+      "definitions": {}
+    }
+  },
+  {
+    "name": "fiji_objects",
+    "description": "The live objects Fiji holds (images, viewers, sessions...): without a type, the number of objects per type; with a type, the objects of that type by the names module inputs accept.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "simple or full class name, e.g. ImagePlus; empty counts the objects per type"
+        }
+      },
+      "required": [],
+      "definitions": {}
+    }
+  },
+  {
+    "name": "fiji_module_script",
+    "description": "The successful fiji_module_run calls of this session as a Groovy script that replays them, every input explicit (modules declaring record=false, which only look, are left out). Once a result is right, save it (path) to keep the pipeline: edit it, turn values into #@ parameters, run it with fiji_module_run (its path is its id), or headless in a fresh Fiji.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "file to write the script to; empty returns it"
+        }
+      },
+      "required": [],
+      "definitions": {}
+    }
+  },
+  {
+    "name": "fiji_ui_windows_read",
+    "description": "List visible AWT and Swing windows, including titles, classes, bounds, active state, and modality",
+    "inputSchema": {
+      "type": "object"
+    }
+  },
+  {
+    "name": "fiji_ui_dialogs_read",
+    "description": "List visible AWT and Swing dialogs, including each dialog's title, messages, buttons, and modal state",
+    "inputSchema": {
+      "type": "object"
+    }
+  },
+  {
+    "name": "fiji_ui_dialog_respond",
+    "description": "Click an exact enabled button in one visible dialog. This tool rejects missing or ambiguous dialogs and never chooses a button implicitly",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "dialog_title": {
+          "type": "string",
+          "description": "Dialog title from fiji_ui_dialogs_read"
+        },
+        "button_text": {
+          "type": "string",
+          "description": "Button text from the same dialog"
+        }
+      },
+      "required": [
+        "dialog_title",
+        "button_text"
+      ],
+      "definitions": {}
+    }
+  }
+]

@@ -10,6 +10,7 @@ __all__ = ("main",)
 
 import argparse
 import asyncio
+import functools
 import json
 import os
 import re
@@ -50,41 +51,30 @@ try:  # in Maven's spelling, as ABBA's: Python spells 0.24.1-SNAPSHOT 0.24.1.dev
 except metadata.PackageNotFoundError:
     BUNDLE_VERSION = "unknown"
 
-# The Fiji tools, forwarded as they are. Defined here so that the assistant sees them before Fiji runs.
-FIJI_TOOLS = {
-    "fiji_module_search": ("Find ABBA and Fiji commands and scripts whose title, menu path or description contain all the words "
-                           "of the query, titles first. Every ABBA action is a command: search here, or grep the command docs.",
-                           {"query": "words to look for, e.g. 'ABBA register'"}, ["query"]),
-    "fiji_module_describe": ("Describe a command or script: its inputs (types, defaults, choices, descriptions, after its "
-                             "initializers ran), its outputs, its messages, the live objects that fit its object inputs, "
-                             "and the artifact and version providing it.",
-                             {"id": "command title (e.g. 'ABBA - Snapshot'), class name, or script file path"}, ["id"]),
-    "fiji_module_run": ("Run a command or script file with inputs as a JSON object string. Never opens a dialog: inputs not "
-                        "given keep their default; an object input (ABBA session, atlas) with one live instance is bound to it. "
-                        "Returns status, outputs (objects by name, pictures as images), new objects, logged warnings and errors. "
-                        "Waits up to wait_seconds (default 60); longer runs return a job for fiji_module_status. "
-                        "Starts Fiji first if it is not running (the first start takes minutes).",
-                        {"id": "command title, class name, or script file path",
-                         "inputs": "JSON object, e.g. {\"slices_csv\": \"0,3\"}", "wait_seconds": "seconds to wait"}, ["id"]),
-    "fiji_module_status": ("Follow a run started by fiji_module_run: waits up to wait_seconds and returns its result or 'running'.",
-                           {"job": "the job id", "wait_seconds": "seconds to wait"}, ["job"]),
-    "fiji_objects": ("The live objects Fiji holds (ABBA sessions, atlases, windows, images...): without a type, the number "
-                     "of objects per type; with a type, its objects by the names command inputs accept.",
-                     {"type": "simple or full class name, e.g. MultiSlicePositioner"}, []),
-    "fiji_module_script": ("The successful fiji_module_run calls of this session as a Groovy script that replays them, every "
-                           "input explicit. Save it (path) next to the data once a result is right: it is the pipeline.",
-                           {"path": "file to write; empty returns the script"}, []),
-    # fiji-llm's window tools, in window mode. Not its screenshot: it copies screen pixels, so it shows whatever covers
-    # the window, possibly another application of the user (abba_window_picture instead)
-    "fiji_ui_windows_read": ("List the visible Fiji windows and dialogs: title, class, bounds, active state. The ABBA "
-                             "window's title starts with its atlas; there may be several ABBA windows.", {}, []),
-    "fiji_ui_dialogs_read": ("List the open dialogs: title, messages, buttons, modality. A command that opened a dialog for "
-                             "the user (interactive registrations) waits until it is closed.", {}, []),
-    "fiji_ui_dialog_respond": ("Click a button of an open dialog, by exact dialog title and button text (fiji_ui_dialogs_read "
-                               "first). Only for dialogs the user asked you to answer.",
-                               {"dialog_title": "exact dialog title", "button_text": "exact button text"},
-                               ["dialog_title", "button_text"]),
+# The Fiji tools this bundle forwards: fiji-modules' module tools, and fiji-llm's window tools for window mode. Not
+# fiji-llm's screenshot: it copies screen pixels, so it shows whatever covers the window, possibly another application
+# of the user (abba_window_picture instead).
+FORWARDED = ["fiji_module_search", "fiji_module_describe", "fiji_module_run", "fiji_module_status", "fiji_objects",
+             "fiji_module_script", "fiji_ui_windows_read", "fiji_ui_dialogs_read", "fiji_ui_dialog_respond"]
+
+# Their definitions as Fiji serves them, written by build/gen_tools.py: the assistant must see the tools before Fiji
+# runs, and the Java code stays their only source. The bundle only adds a sentence about ABBA to some of them.
+FIJI_TOOLS_FILE = HERE / "fiji_tools.json"
+NOTES = {
+    "fiji_module_search": "Every ABBA action is a command: search here, or grep the command docs.",
+    "fiji_module_run": "Starts Fiji first if it is not running: the first start downloads Fiji and ABBA and takes minutes.",
+    "fiji_objects": "An ABBA session is a MultiSlicePositioner.",
+    "fiji_ui_windows_read": "The ABBA window's title starts with its atlas; there may be several ABBA windows.",
+    "fiji_ui_dialogs_read": "A command that opened a dialog for the user (interactive registrations) waits until it is closed.",
+    "fiji_ui_dialog_respond": "Only for dialogs the user asked you to answer.",
 }
+
+
+@functools.cache
+def fiji_tools() -> dict:
+    return {t["name"]: types.Tool(name=t["name"], description=" ".join(filter(None, [t["description"], NOTES.get(t["name"])])),
+                                  inputSchema=t["inputSchema"])
+            for t in json.loads(FIJI_TOOLS_FILE.read_text(encoding="utf-8"))}
 
 PICTURE_SCRIPT = DATA / "scripting" / "window_picture.groovy"
 
@@ -261,7 +251,7 @@ def main() -> int:
 
     @server.list_tools()
     async def list_tools() -> list[types.Tool]:
-        return [tool(n, s) for n, s in {**FIJI_TOOLS, **BUNDLE_TOOLS}.items()]
+        return list(fiji_tools().values()) + [tool(n, s) for n, s in BUNDLE_TOOLS.items()]
 
     @server.call_tool()
     async def call_tool(name: str, arguments: dict):
@@ -273,7 +263,7 @@ def main() -> int:
             inputs = {"window_title": arguments["window_title"]} if (arguments or {}).get("window_title") else {}
             return await _forward("fiji_module_run", {"id": PICTURE_SCRIPT.as_posix(), "inputs": json.dumps(inputs),
                                                       "wait_seconds": "30"}, gui)
-        if name in FIJI_TOOLS:
+        if name in fiji_tools():
             return await _forward(name, arguments, gui)
         raise ValueError(f"Unknown tool {name}")
 

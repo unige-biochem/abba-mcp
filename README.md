@@ -22,6 +22,9 @@ neither is published yet. Everything else in `env/jgo.toml` is a release.
 2. Regenerate the command docs: run `build/gen_commands.groovy` in that environment's Fiji (for instance through
    `fiji_module_run`) with `outDir` an empty folder, and copy the result over `src/abba_mcp/data/commands/`.
    Mention new commands in the guides where they belong.
+   Regenerate the definitions of the forwarded Fiji tools and the manifest's tool list from the same Fiji:
+   `uv run python build/gen_tools.py`. The tools are defined in Java only (fiji-modules, fiji-llm); the server
+   adds one sentence about ABBA to some (`NOTES` in `src/abba_mcp/__init__.py`).
 3. Update `src/abba_mcp/data/environment.md`, and the version in `manifest.json` and `pyproject.toml`: **the
    bundle's version is ABBA's** (`0.24.0`), plus `+N` for a re-release of the bundle alone (`0.24.0+1`).
    `check_env.sh` fails otherwise.

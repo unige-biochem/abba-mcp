@@ -19,4 +19,4 @@ abba-mcp = "abba_mcp:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"abba_mcp" = ["env/*", "data/**/*"]
+"abba_mcp" = ["fiji_tools.json", "env/*", "data/**/*"]
