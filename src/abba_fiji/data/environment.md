@@ -5,8 +5,8 @@ If a command or an option you expect is missing, check here before assuming you 
 
 | Component | Version |
 |---|---|
-| ABBA (ch.epfl.biop:ImageToAtlasRegister) | 0.24.1-SNAPSHOT |
-| Atlases (ch.epfl.biop:atlas): Allen mouse CCFv3 / v3.1, Waxholm rat v4 / v4.2, BrainGlobe (about 230, `List BrainGlobe Atlases`) | 0.23.4-SNAPSHOT |
+| ABBA (ch.epfl.biop:ImageToAtlasRegister) | 0.24.1 |
+| Atlases (ch.epfl.biop:atlas): Allen mouse CCFv3 / v3.1, Waxholm rat v4 / v4.2, BrainGlobe (about 230, `List BrainGlobe Atlases`) | 0.23.4 |
 | BigDataViewer-Playground (sc.fiji:bigdataviewer-playground) | 0.23.1 |
 | BIOP tools, Elastix wrapper (ch.epfl.biop:bigdataviewer-biop-tools) | 0.24.1 |
 | Image loaders: Bio-Formats, OMERO, QuPath projects (ch.epfl.biop:bigdataviewer-image-loaders) | 0.23.3 |

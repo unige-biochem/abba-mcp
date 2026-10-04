@@ -6,7 +6,7 @@
 set -euo pipefail
 deps="$(cd "$1" && jgo --lenient --class-path-only info deplist 2>/dev/null)"
 status=0
-for a in bigdataviewer-biop-tools bigdataviewer-image-loaders bigdataviewer-playground; do
+for a in atlas bigdataviewer-biop-tools bigdataviewer-image-loaders bigdataviewer-playground; do
   want=$(grep -oE "<$a.version>[^<]+" "$2" | head -1 | cut -d'>' -f2)
   got=$(printf '%s\n' "$deps" | grep -oE ":$a:[^: ]+" | head -1 | cut -d: -f3)
   if [ "$want" = "$got" ]; then echo "ok   $a $got"; else echo "FAIL $a resolved $got, ABBA declares $want"; status=1; fi

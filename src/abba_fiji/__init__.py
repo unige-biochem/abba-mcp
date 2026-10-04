@@ -1,4 +1,4 @@
-"""abba-mcp (codename sextant): ABBA in Fiji, for AI assistants.
+"""abba-fiji: ABBA in Fiji, for AI assistants.
 
 A thin stdio MCP server. It owns no image-analysis logic:
 - it starts the pinned ABBA Fiji (jgo, env/jgo.toml) the first time a Fiji tool is called;
@@ -33,7 +33,7 @@ DATA = HERE / "data"
 ENV = HERE / "env"
 PORT = 9090
 URL = f"http://127.0.0.1:{PORT}/mcp"
-STATE = Path(os.environ.get("ABBA_MCP_HOME", Path.home() / ".abba-mcp"))
+STATE = Path(os.environ.get("ABBA_FIJI_HOME", Path.home() / ".abba-fiji"))
 START_TIMEOUT_S = 1800  # the first start downloads Java, Fiji and ABBA
 
 
@@ -47,7 +47,7 @@ def _pinned(artifact: str) -> str:
 ABBA_VERSION = _pinned("ImageToAtlasRegister")
 FIJI_VERSION = _pinned("fiji")
 try:  # in Maven's spelling, as ABBA's: Python spells 0.24.1-SNAPSHOT 0.24.1.dev0
-    BUNDLE_VERSION = metadata.version("abba-fiji-mcp").replace(".dev0", "-SNAPSHOT")
+    BUNDLE_VERSION = metadata.version("abba-fiji").replace(".dev0", "-SNAPSHOT")
 except metadata.PackageNotFoundError:
     BUNDLE_VERSION = "unknown"
 
@@ -55,7 +55,8 @@ except metadata.PackageNotFoundError:
 # fiji-llm's screenshot: it copies screen pixels, so it shows whatever covers the window, possibly another application
 # of the user (abba_window_picture instead).
 FORWARDED = ["fiji_module_search", "fiji_module_describe", "fiji_module_run", "fiji_module_status", "fiji_objects",
-             "fiji_module_script", "fiji_ui_windows_read", "fiji_ui_dialogs_read", "fiji_ui_dialog_respond"]
+             "fiji_module_script", "fiji_ui_windows_read", "fiji_ui_dialogs_read", "fiji_ui_dialog_respond",
+             "fiji_ui_dialog_close"]
 
 # Their definitions as Fiji serves them, written by build/gen_tools.py: the assistant must see the tools before Fiji
 # runs, and the Java code stays their only source. The bundle only adds a sentence about ABBA to some of them.
@@ -67,6 +68,7 @@ NOTES = {
     "fiji_ui_windows_read": "The ABBA window's title starts with its atlas; there may be several ABBA windows.",
     "fiji_ui_dialogs_read": "A command that opened a dialog for the user (interactive registrations) waits until it is closed.",
     "fiji_ui_dialog_respond": "Only for dialogs the user asked you to answer.",
+    "fiji_ui_dialog_close": "Only for dialogs the user asked you to close.",
 }
 
 
@@ -242,7 +244,7 @@ def main() -> int:
     parser.add_argument("--version", action="version",
                         version=f"abba-fiji {BUNDLE_VERSION} (ABBA {ABBA_VERSION}, Fiji {FIJI_VERSION})")
     args = parser.parse_args()
-    gui = not (args.headless or os.environ.get("ABBA_MCP_HEADLESS", "").lower() in ("1", "true", "yes"))
+    gui = not (args.headless or os.environ.get("ABBA_FIJI_HEADLESS", "").lower() in ("1", "true", "yes"))
     if args.print_instructions:
         print(instructions(gui))
         return 0

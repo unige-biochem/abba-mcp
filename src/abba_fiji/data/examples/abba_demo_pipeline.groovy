@@ -9,7 +9,7 @@
 
 // A complete ABBA registration of the demo dataset, without any dialog: it runs as is in Fiji's script
 // editor, through fiji_module_run (headless or not), or one-shot from a pipeline.
-// Born as fiji_module_script's recording of an agent session (sextant), then edited by hand:
+// Born as fiji_module_script's recording of an agent session, then edited by hand:
 // values that vary became #@ parameters, inspection steps were dropped, outputs were declared.
 // Coronal sections: x = RL, y = SI, z = AP. Commands are run with modules.run(command.getCommand(...)):
 // command.run returns null for dynamic commands such as Open Atlas (a SciJava design flaw).

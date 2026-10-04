@@ -101,7 +101,7 @@ Not commands, but equivalent: `Slices > Remove Slices` (`ABBA - Delete Slices`),
   registration, prefer `ABBA - Snapshot`, which does not depend on the window and its zoom.
 - **Error and warning messages** reach you first, in the run's `messages` (or its error), then the user in a
   dialog of the window; the command does not wait for the dialog. `fiji_ui_dialogs_read` lists the dialogs still
-  open; close one for the user only if they ask.
+  open; answer one (`fiji_ui_dialog_respond`, a button) or close it (`fiji_ui_dialog_close`) only if the user asks.
 - **Interactive commands** return at once: the window opens when the slices' queued work reaches it, one at a
   time (a lock serialises manual editions). `ABBA - Get State` waits until the user has finished; run it with
   a short `wait_seconds`, then follow the job id with `fiji_module_status`. Or watch `fiji_ui_windows_read`.

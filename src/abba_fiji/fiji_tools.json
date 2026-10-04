@@ -144,5 +144,22 @@
       ],
       "definitions": {}
     }
+  },
+  {
+    "name": "fiji_ui_dialog_close",
+    "description": "Request the normal window-manager close action for one visible dialog. This tool rejects missing or ambiguous dialogs, does not choose a button, and reports whether the dialog remains visible",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "dialog_title": {
+          "type": "string",
+          "description": "Dialog title from fiji_ui_dialogs_read"
+        }
+      },
+      "required": [
+        "dialog_title"
+      ],
+      "definitions": {}
+    }
   }
 ]

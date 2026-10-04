@@ -2,7 +2,7 @@
 #@ String (value = "ch.epfl.biop.atlas") packagePrefix
 #@ CommandService commands
 #@output Integer written
-// sextant: one Markdown file per command of the environment, in a tree that mirrors the menu,
+// One Markdown file per command of the environment, in a tree that mirrors the menu,
 // generated from the commands' own annotations (scijava-introspect, static: no initializer runs).
 import ch.unige.biochem.scijava.introspect.CommandIntrospector
 import groovy.json.JsonSlurper

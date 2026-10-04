@@ -2,20 +2,20 @@
   "manifest_version": "0.4",
   "name": "abba-fiji",
   "display_name": "ABBA (Fiji)",
-  "version": "0.24.1-SNAPSHOT",
+  "version": "0.24.1",
   "description": "Register brain sections to atlases with ABBA in Fiji, driven by your assistant",
-  "long_description": "Starts ABBA (Aligning Big Brains and Atlases) in a pinned Fiji the first time it is needed, and lets the assistant run ABBA's commands, look at rendered snapshots and save the session as a replayable Groovy pipeline. Bundles version-matched documentation. Experimental (codename sextant).",
+  "long_description": "Starts ABBA (Aligning Big Brains and Atlases) in a pinned Fiji the first time it is needed, and lets the assistant run ABBA's commands, look at rendered snapshots and save the session as a replayable Groovy pipeline. Bundles version-matched documentation. Experimental.",
   "author": { "name": "Nicolas Chiaruttini", "url": "https://github.com/NicoKiaru" },
   "homepage": "https://abba-documentation.readthedocs.io",
   "support": "https://forum.image.sc/tag/abba",
   "icon": "icon.png",
   "server": {
     "type": "uv",
-    "entry_point": "src/abba_mcp/__init__.py",
+    "entry_point": "src/abba_fiji/__init__.py",
     "mcp_config": {
       "command": "uv",
-      "args": ["run", "--directory", "${__dirname}", "abba-mcp"],
-      "env": { "ABBA_MCP_HEADLESS": "${user_config.headless}" }
+      "args": ["run", "--directory", "${__dirname}", "abba-fiji"],
+      "env": { "ABBA_FIJI_HEADLESS": "${user_config.headless}" }
     }
   },
   "user_config": {
@@ -37,6 +37,7 @@
     { "name": "fiji_ui_windows_read", "description": "List visible AWT and Swing windows, including titles, classes, bounds, active state, and modality" },
     { "name": "fiji_ui_dialogs_read", "description": "List visible AWT and Swing dialogs, including each dialog's title, messages, buttons, and modal state" },
     { "name": "fiji_ui_dialog_respond", "description": "Click an exact enabled button in one visible dialog" },
+    { "name": "fiji_ui_dialog_close", "description": "Request the normal window-manager close action for one visible dialog" },
     { "name": "abba_window_picture", "description": "Picture of one Fiji window as it is drawn, what the user sees in it: right even when the window is covered or the screen is locked, and never another application" },
     { "name": "abba_docs_search", "description": "Search the bundled ABBA documentation (guides, one file per command, scripting, examples) with a regular expression; returns matching lines with their file" },
     { "name": "abba_docs_read", "description": "Read one bundled documentation file, by its path relative to the docs folder (as abba_docs_search gives it)" }
