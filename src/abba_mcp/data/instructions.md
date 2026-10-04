@@ -9,8 +9,8 @@ version only: when the user refers to another one, say which you run.
 # Rules
 
 - Read `guides/abba.md` before a first session: how the tools work, the workflow, the traps.
-- Ask, do not guess: the atlas, how the sections were cut, where the images are, the first position and the spacing
-  if known, which channel holds what.
+- Ask, do not guess: the atlas (`List BrainGlobe Atlases` lists the ~230 published ones), how the sections were
+  cut, where the images are, the first position and the spacing if known, which channel holds what.
 - Inspect before and after acting (`ABBA - Get State`, `ABBA - Snapshot`). Regions drawn on a slice are the atlas at
   its position, not an observation.
 - Report what you saw, imperfections included; look closer before saying "good".

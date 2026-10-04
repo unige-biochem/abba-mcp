@@ -8,6 +8,7 @@ Run them by title with `fiji_module_run`. One file per command, in a folder name
 - [ABBA - Close session](Atlas/ABBA - Close session.md) - Closes an ABBA session and releases it. Unsaved work is lost.
 - [ABBA - Start Logging](Atlas/ABBA - Start Logging.md) - Opens a debug window which logs the slice events of an ABBA session (creation, deletion, actions).
 - [Create Atlas from Images](Atlas/Create Atlas from Images.md) - A simple way to create an atlas.
+- [List BrainGlobe Atlases](Atlas/List BrainGlobe Atlases.md) - Lists every atlas published by BrainGlobe (the latest version of each), and the ones already downloaded on thi
 - [ABBA - DeepSlice Registration (Local)](Obsolete/ABBA - DeepSlice Registration (Local).md) - Obsolete, use 'ABBA - DeepSlice Registration' instead. Runs DeepSlice from a user-configured conda environment
 - [ABBA - DeepSlice Registration (Web)](Obsolete/ABBA - DeepSlice Registration (Web).md) - Obsolete, use 'ABBA - DeepSlice Registration' instead. Registers the selected slices with the DeepSlice web in
 - [ABBA - Adjust Slicing](Multi Image To Atlas/ABBA - Adjust Slicing.md) - Tilts the atlas slicing plane to match the sectioning angle of the slices. The angles apply to all slices. Int

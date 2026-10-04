@@ -21,10 +21,13 @@ coordinates, exports), `window.md` (the ABBA window, working with the user in it
 
 ## Before starting: ask the user
 
-- **The atlas.** `Open Atlas` lists what is available (describe it: the list is computed at runtime).
-  `allen_mouse_10um_java` (Allen mouse CCFv3.1) and `whs_sd_rat_39um_java` (Waxholm rat v4.2) are built in;
-  names like `allen_mouse_25um@3.0` are BrainGlobe atlases, downloaded on demand. Avoid the
-  `Get BrainGlobe Atlases...` and "not downloaded yet" entries without asking: they download or open a window.
+- **The atlas.** `allen_mouse_10um_java` (Allen mouse CCFv3.1) and `whs_sd_rat_39um_java` (Waxholm rat v4.2) are
+  built in. BrainGlobe publishes about 230 more (species, ages, resolutions): `List BrainGlobe Atlases` lists them
+  all with their versions and marks the ones downloaded on this computer (`filter`: e.g. `mouse`, `rat 25um`).
+  Any of them opens with `Open Atlas`, choice = the name with its version (`allen_mouse_25um@3.0`). One not
+  downloaded is downloaded first, which can take minutes and a few GB: ask before. `Open Atlas`'s own choices
+  (describe it) show the built-in and downloaded atlases, and the others once the list was fetched. Avoid its
+  `Get BrainGlobe Atlases...` entry: it opens a window.
 - **How the sections were cut**, which sets the axes of `ABBA - ABBA Start`:
   coronal x=`RL (Right-Left)`, y=`SI (Superior-Inferior)`, z=`AP (Anterior-Posterior)`;
   sagittal x=`AP`, y=`SI`, z=`LR`; horizontal x=`LR`, y=`AP`, z=`SI` (full choice strings in the command doc).
