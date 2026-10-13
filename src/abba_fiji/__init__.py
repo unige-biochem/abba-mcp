@@ -124,12 +124,21 @@ def _repositories() -> list:
     return [o for name, url in _section("repositories").items() for o in ("-r", f"{name}:{url}")]
 
 
+def _java_home() -> Path:
+    """The JDK of [java] in env/jgo.toml, downloaded on first use. jgo would run any Java already installed (JAVA_HOME,
+    PATH) that is at least that version, whatever its vendor: the server puts this one first instead."""
+    import cjdk  # a dependency of jgo, which uses the same cache
+
+    java = _section("java")
+    return Path(cjdk.java_home(vendor=java["vendor"], version=java["version"]))
+
+
 def _jgo() -> list:
     exe = shutil.which("jgo", path=str(Path(sys.executable).parent)) or shutil.which("jgo")
     return ([exe] if exe else [sys.executable, "-m", "jgo"]) + _repositories()
 
 
-def _start_fiji(gui: bool):
+def _start_fiji(gui: bool, java_home: Path):
     STATE.mkdir(parents=True, exist_ok=True)
     work = STATE / "env"
     work.mkdir(exist_ok=True)
@@ -137,6 +146,9 @@ def _start_fiji(gui: bool):
         shutil.copy(ENV / f, work / f)
     here = work.as_posix()
     env = dict(os.environ)
+    # jgo looks at JAVA_HOME, then PATH; on Windows only PATH counts (it looks for bin/java, not bin/java.exe)
+    env["JAVA_HOME"] = str(java_home)
+    env["PATH"] = str(java_home / "bin") + os.pathsep + env.get("PATH", "")
     opts = f"--add-opens=java.base/java.lang=ALL-UNNAMED -Dlogback.configurationFile={here}/logback.xml"
     if not gui:
         opts += " -Djava.awt.headless=true"
@@ -144,6 +156,8 @@ def _start_fiji(gui: bool):
     args = _jgo() + ["--lenient", "--class-path-only", "run", "--local", "--", "--"]
     args += (["--headless"] if not gui else []) + ["--run", f"{here}/startmcp.groovy"]
     log = open(STATE / "fiji.log", "w", encoding="utf-8")
+    log.write(f"abba-fiji {BUNDLE_VERSION}, Java: {java_home}\n")
+    log.flush()
     flags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS if os.name == "nt" else 0
     return subprocess.Popen(args, cwd=work, env=env, stdout=log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
                             creationflags=flags, start_new_session=os.name != "nt")
@@ -157,7 +171,11 @@ async def _ensure_fiji(gui: bool):
     if _port_open():
         return
     _verified = False
-    process = _start_fiji(gui)
+    try:  # a download on first use: off the event loop
+        java_home = await asyncio.to_thread(_java_home)
+    except Exception as e:
+        raise RuntimeError(f"Could not get Java {_section('java')} (downloaded on first use): {e}") from e
+    process = _start_fiji(gui, java_home)
     t0 = time.time()
     while time.time() - t0 < START_TIMEOUT_S:
         await asyncio.sleep(2)

@@ -15,7 +15,7 @@ If a command or an option you expect is missing, check here before assuming you 
 | ImageJ 1.x (net.imagej:ij) | 1.54p |
 | Appose (org.apposed:appose) | 0.12.0 |
 | fiji-llm (MCP server) / fiji-modules (module tools) | 0.1.0 / 0.1.1 |
-| Java | 21 (downloaded by jgo) |
+| Java | Zulu 21 (downloaded on first start; a Java already installed on the machine is not used) |
 
 Python tools, installed on first use through Appose (pixi), in their own environments:
 

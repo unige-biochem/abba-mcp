@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = [
     "mcp>=1.9,<2",
     "jgo[cli]>=3.1",
+    "cjdk>=0.5",  # the pinned JDK (env/jgo.toml [java]); also a dependency of jgo
 ]
 
 [project.scripts]

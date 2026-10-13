@@ -2,6 +2,12 @@
 name = "abba-fiji"
 description = "ABBA in Fiji with an MCP server for AI assistants"
 
+[java]
+# Read by the server, which fetches this JDK itself (cjdk) and puts it first for jgo: on its own, jgo runs any
+# Java already installed that is at least this version.
+version = "21"
+vendor = "zulu"
+
 [repositories]
 # ABBA, fiji-llm and fiji-modules are on the SciJava repository only, not on Maven Central (jgo's only default)
 scijava = "https://maven.scijava.org/content/groups/public"
