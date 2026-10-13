@@ -46,6 +46,8 @@ def _pinned(artifact: str) -> str:
 # The bundle's version is ABBA's (build/check_env.sh checks it): the docs and examples are for this ABBA only.
 ABBA_VERSION = _pinned("ImageToAtlasRegister")
 FIJI_VERSION = _pinned("fiji")
+# The user documentation is tagged per ABBA release (v<version>)
+USER_DOCS = f"https://abba-documentation.readthedocs.io/en/v{ABBA_VERSION}/"
 try:  # in Maven's spelling, as ABBA's: Python spells 0.24.1-SNAPSHOT 0.24.1.dev0
     BUNDLE_VERSION = metadata.version("abba-fiji").replace(".dev0", "-SNAPSHOT")
 except metadata.PackageNotFoundError:
@@ -264,7 +266,7 @@ def instructions(gui: bool = True) -> str:
     text = (DATA / "instructions.md").read_text(encoding="utf-8")
     return (text.replace("{DOCS}", DATA.as_posix()).replace("{MODE}", MODES[gui])
             .replace("{ABBA_VERSION}", ABBA_VERSION).replace("{BUNDLE_VERSION}", BUNDLE_VERSION)
-            .replace("{FIJI_VERSION}", FIJI_VERSION))
+            .replace("{FIJI_VERSION}", FIJI_VERSION).replace("{USER_DOCS}", USER_DOCS))
 
 
 def main() -> int:
