@@ -4,7 +4,9 @@
 # Coordinate order in jgo.toml decides transitive versions silently: this caught biop-tools 0.23.0 instead of 0.24.0.
 # Usage: check_env.sh <dir with jgo.toml> <ABBA pom.xml>
 set -euo pipefail
-deps="$(cd "$1" && jgo --lenient --class-path-only info deplist 2>/dev/null)"
+# jgo 3.1 ignores the [repositories] of jgo.toml: pass them as options, as the server does
+repos=$(awk '{sub(/\r$/,"")} /^\[/{s=($0=="[repositories]")} s && /^[A-Za-z]/{gsub(/[ "]/,""); sub(/=/,":"); print "-r " $0}' "$1/jgo.toml")
+deps="$(cd "$1" && jgo $repos --lenient --class-path-only info deplist 2>/dev/null)"
 status=0
 for a in atlas bigdataviewer-biop-tools bigdataviewer-image-loaders bigdataviewer-playground; do
   want=$(grep -oE "<$a.version>[^<]+" "$2" | head -1 | cut -d'>' -f2)

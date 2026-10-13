@@ -112,9 +112,21 @@ def _port_open() -> bool:
         return s.connect_ex(("127.0.0.1", PORT)) == 0
 
 
+def _section(name: str) -> dict:
+    """The `key = "value"` lines of one [section] of env/jgo.toml."""
+    section = re.search(rf"^\[{name}\]\n(.*?)(?=^\[|\Z)", (ENV / "jgo.toml").read_text(encoding="utf-8"), re.M | re.S)
+    return dict(re.findall(r'^(\w[\w.-]*)\s*=\s*"([^"]+)"', section.group(1) if section else "", re.M))
+
+
+def _repositories() -> list:
+    """jgo options for the [repositories] of env/jgo.toml: jgo 3.1 reads that section but resolves from Maven Central
+    only, so ABBA resolved only where the local Maven repository already held it."""
+    return [o for name, url in _section("repositories").items() for o in ("-r", f"{name}:{url}")]
+
+
 def _jgo() -> list:
     exe = shutil.which("jgo", path=str(Path(sys.executable).parent)) or shutil.which("jgo")
-    return [exe] if exe else [sys.executable, "-m", "jgo"]
+    return ([exe] if exe else [sys.executable, "-m", "jgo"]) + _repositories()
 
 
 def _start_fiji(gui: bool):

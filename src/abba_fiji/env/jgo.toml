@@ -2,6 +2,10 @@
 name = "abba-fiji"
 description = "ABBA in Fiji with an MCP server for AI assistants"
 
+[repositories]
+# ABBA, fiji-llm and fiji-modules are on the SciJava repository only, not on Maven Central (jgo's only default)
+scijava = "https://maven.scijava.org/content/groups/public"
+
 [dependencies]
 coordinates = [
     # fiji-llm's MCP server needs Jetty 11 and Jackson 2.19; the ABBA stack alone resolves Jetty 9.4 and Jackson 2.16.
@@ -18,8 +22,8 @@ coordinates = [
     # listed first, an artifact's own dependencies win (build/check_env.sh guards against that).
     "ch.epfl.biop:ImageToAtlasRegister:0.24.1",
     "sc.fiji:fiji:2.18.0",
-    "sc.fiji:fiji-llm:0.1.0-SNAPSHOT",
-    "ch.unige.biochem:fiji-modules:0.1.0-SNAPSHOT",
+    "sc.fiji:fiji-llm:0.1.0",
+    "ch.unige.biochem:fiji-modules:0.1.1",
 ]
 
 [entrypoints]
