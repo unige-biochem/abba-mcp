@@ -1,23 +1,41 @@
 [build-system]
-requires = ["setuptools>=68.0"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "abba-fiji"
-version = "0.24.1"
-description = "ABBA (Aligning Big Brains and Atlases) in Fiji, for AI assistants: MCP server, pinned environment and docs"
+name = "abba-mcp"
+version = "0.25.0"
+description = "MCP server for ABBA (Aligning Big Brains and Atlases): an AI assistant registers brain sections to atlases in a pinned Fiji"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
+authors = [{ name = "Nicolas Chiaruttini", email = "nicolas.chiaruttini@unige.ch" }]
+keywords = ["mcp", "abba", "fiji", "imagej", "brain atlas", "registration", "neuroscience"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
 dependencies = [
     "mcp>=1.9,<2",
     "jgo[cli]>=3.1",
     "cjdk>=0.5",  # the pinned JDK (env/jgo.toml [java]); also a dependency of jgo
 ]
 
+[project.urls]
+Homepage = "https://github.com/unige-biochem/abba-mcp"
+Issues = "https://github.com/unige-biochem/abba-mcp/issues"
+Documentation = "https://abba-documentation.readthedocs.io"
+
 [project.scripts]
-abba-fiji = "abba_fiji:main"
+abba-mcp = "abba_mcp:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-"abba_fiji" = ["fiji_tools.json", "env/*", "data/**/*"]
+"abba_mcp" = ["fiji_tools.json", "env/*", "data/**/*"]

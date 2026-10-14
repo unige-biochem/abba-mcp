@@ -1,0 +1,87 @@
+# Commands of this environment (ch.epfl.biop.atlas*)
+
+Run them by title with `fiji_module_run`. One file per command, in a folder named after its menu (Align, Export, Inspect...); the full menu path is in each file.
+
+- [ABBA - ABBA Start (alpha)](Atlas/ABBA - ABBA Start (alpha).md) - Experimental: starts ABBA in a BigDataViewer window with alpha blending of the sources, and optionally a white
+- [ABBA - ABBA Start](Atlas/ABBA - ABBA Start.md) - Starts ABBA in a BigDataViewer window, with an atlas sliced along the chosen orientation. Slices are then impo
+- [ABBA - Align Big Brains and Atlases (no GUI)](Atlas/ABBA - Align Big Brains and Atlases (no GUI).md) - Starts an ABBA session without graphical user interface (for scripting), with an atlas sliced along the chosen
+- [ABBA - Close session](Atlas/ABBA - Close session.md) - Closes an ABBA session and releases it. Unsaved work is lost.
+- [ABBA - Start Logging](Atlas/ABBA - Start Logging.md) - Opens a debug window which logs the slice events of an ABBA session (creation, deletion, actions).
+- [Create Atlas from Images](Atlas/Create Atlas from Images.md) - A simple way to create an atlas.
+- [List BrainGlobe Atlases](Atlas/List BrainGlobe Atlases.md) - Lists every atlas published by BrainGlobe (the latest version of each), and the ones already downloaded on thi
+- [ABBA - DeepSlice Registration (Local)](Obsolete/ABBA - DeepSlice Registration (Local).md) - Obsolete, use 'ABBA - DeepSlice Registration' instead. Runs DeepSlice from a user-configured conda environment
+- [ABBA - DeepSlice Registration (Web)](Obsolete/ABBA - DeepSlice Registration (Web).md) - Obsolete, use 'ABBA - DeepSlice Registration' instead. Registers the selected slices with the DeepSlice web in
+- [ABBA - Adjust Slicing](Multi Image To Atlas/ABBA - Adjust Slicing.md) - Tilts the atlas slicing plane to match the sectioning angle of the slices. The angles apply to all slices. Int
+- [ABBA - Define Rectangular ROI](Multi Image To Atlas/ABBA - Define Rectangular ROI.md) - Defines the rectangular region of interest (ROI) of the sections: registrations only consider this region, and
+- [ABBA - Open Demo Slices From OMERO](Multi Image To Atlas/ABBA - Open Demo Slices From OMERO.md) - Imports demo mouse brain sections streamed from the German BioImaging OMERO server (shared read-only demo acco
+- [ABBA - Open Demo Slices From ZENODO](Multi Image To Atlas/ABBA - Open Demo Slices From ZENODO.md) - Imports demo mouse brain sections from whole slide images (vsi) downloaded from Zenodo and cached locally (abo
+- [ABBA - Preferences](Multi Image To Atlas/ABBA - Preferences.md) - Not functional: meant to edit the keyboard and mouse bindings of the ABBA viewer.
+- [ABBA - Run Benchmark](Multi Image To Atlas/ABBA - Run Benchmark.md) - Runs a complete ABBA workflow on a demo dataset (mouse atlas, import, two DeepSlice runs, Elastix affine and s
+- [ABBA - BigWarp Registration](Align/ABBA - BigWarp Registration.md) - Manual in-plane non-linear registration of the selected slices: each slice is opened in BigWarp, one after the
+- [ABBA - Copy and Apply Registration](Align/ABBA - Copy and Apply Registration.md) - Copies all registrations of a model slice and appends them, as they are (no new computation), to the registrat
+- [ABBA - DeepSlice Registration](Align/ABBA - DeepSlice Registration.md) - Runs DeepSlice (installed automatically in a local Python environment) on the selected slices, after the comma
+- [ABBA - Edit Last Registration](Align/ABBA - Edit Last Registration.md) - Manually edits the last registration of each selected slice, if it is editable: spline registrations (Elastix 
+- [ABBA - Elastix Registration (Affine)](Align/ABBA - Elastix Registration (Affine).md) - Automatic in-plane affine registration (translation, rotation, scaling, shear) of the selected slices to the a
+- [ABBA - Elastix Registration (Spline)](Align/ABBA - Elastix Registration (Spline).md) - Automatic in-plane non-linear (B-spline) registration of the selected slices to the atlas with Elastix, restri
+- [ABBA - Manual Affine Registration](Align/ABBA - Manual Affine Registration.md) - Manual in-plane affine registration: moves, rotates, scales and shears the selected slices with a gizmo, in a 
+- [ABBA - Mirror Slices](Align/ABBA - Mirror Slices.md) - Turns hemi-sections into full sections, for instance before DeepSlice which needs full sections. The vertical 
+- [ABBA - Re-index channels of slices](Align/ABBA - Re-index channels of slices.md) - Reorders, removes or duplicates the channels of the selected slices. Each selected slice is replaced by a new 
+- [ABBA - Remove Last Registration](Align/ABBA - Remove Last Registration.md) - Removes the last registration of each selected slice (it can be undone).
+- [ABBA - Un-Mirror Slices](Align/ABBA - Un-Mirror Slices.md) - Removes the mirroring of the selected slices, made with 'Mirror Slices', while keeping the registrations done 
+- [ABBA - Get Prompt for Methods Writing](Cite/ABBA - Get Prompt for Methods Writing.md) - Generates a prompt describing how the selected slices were registered (atlas, slicing angles, positions, regis
+- [ABBA - How to cite](Cite/ABBA - How to cite.md) - Shows how to cite ABBA and the tools it uses, in a window (requires an internet connection).
+- [ABBA - Auto Display Range](Edit/ABBA - Auto Display Range.md) - Sets the display range of channels of the selected slices from percentiles of their pixel values, measured on 
+- [ABBA - Delete Slices](Edit/ABBA - Delete Slices.md) - Removes slices from the session, as the delete action of the ABBA window does. No file is touched, and undo re
+- [ABBA - Deselect Slices](Edit/ABBA - Deselect Slices.md) - Removes slices from the current selection, by index. Other slices keep their selection state.
+- [ABBA - Distribute Slices](Edit/ABBA - Distribute Slices.md) - Spaces the selected slices evenly along the slicing axis, as 'Distribute Slices [D]' does in the ABBA window. 
+- [ABBA - Move Slices](Edit/ABBA - Move Slices.md) - Moves slices along the slicing axis to the given positions, as dragging them in the ABBA window does. Position
+- [ABBA - Raster and cache deformation field](Edit/ABBA - Raster and cache deformation field.md) - Speeds up the display of the selected slices by computing their deformation field on a grid and interpolating 
+- [ABBA - Raster slice](Edit/ABBA - Raster slice.md) - Speeds up the display of the selected slices by computing and caching their registered image at a fixed pixel 
+- [ABBA - Rotate](Edit/ABBA - Rotate.md) - Rotates the selected slices around the center of the registration ROI. Z: in-plane rotation, clockwise on scre
+- [ABBA - Select Slices](Edit/ABBA - Select Slices.md) - Adds slices to the current selection, by index. Already selected slices stay selected. Most commands act on th
+- [ABBA - Set Atlas Slicing Angles](Edit/ABBA - Set Atlas Slicing Angles.md) - Sets the angles at which the atlas is sliced, for all slices of the session: the correction for a cutting plan
+- [ABBA - Set Key Slices](Edit/ABBA - Set Key Slices.md) - Marks slices as key slices (or unmarks them). Key slices keep their position when ABBA - Distribute Slices spa
+- [ABBA - Set Region Of Interest](Edit/ABBA - Set Region Of Interest.md) - Sets the rectangular region of interest (ROI) of the session: registrations only consider this region, and exp
+- [ABBA - Set Slice Background](Edit/ABBA - Set Slice Background.md) - For brightfield images with a white background: the area outside of the selected slices images is filled with 
+- [ABBA - Set Slices Min Max Display Range](Edit/ABBA - Set Slices Min Max Display Range.md) - Sets the display range (min and max displayed values) of channels of the selected slices. Besides the display,
+- [ABBA - Set Slices Thickness (fill gaps)](Edit/ABBA - Set Slices Thickness (fill gaps).md) - Sets the thickness of each selected slice so that it extends halfway to its neighbors, leaving no gap between 
+- [ABBA - Set Slices Thickness](Edit/ABBA - Set Slices Thickness.md) - Sets the thickness of the selected slices along the slicing axis. It affects the 3D display (reconstructed bra
+- [ABBA - Undo or Redo](Edit/ABBA - Undo or Redo.md) - Undoes (or redoes) the last user actions of a session, as Ctrl+Z (Ctrl+Shift+Z) does in the ABBA window. One s
+- [ABBA - Export Atlas Coordinates of Original Slices to ImageJ](Export/ABBA - Export Atlas Coordinates of Original Slices to ImageJ.md) - For each selected slice, exports a 3-channel (x, y, z) 32-bit ImageJ image with the same pixels as the origina
+- [ABBA - Export Atlas to ImageJ](Export/ABBA - Export Atlas to ImageJ.md) - Exports the atlas section at the position of each selected slice as an ImageJ image, one plane per slice, with
+- [ABBA - Export Original Slices to ImageJ](Export/ABBA - Export Original Slices to ImageJ.md) - Opens in ImageJ the original, unregistered image of each selected slice, at the chosen resolution level. Fails
+- [ABBA - Export Regions To File](Export/ABBA - Export Regions To File.md) - Saves the atlas regions of each selected slice as an ImageJ ROI set zip file, named after the slice, with ROIs
+- [ABBA - Export Regions To Roi Manager](Export/ABBA - Export Regions To Roi Manager.md) - Adds the atlas regions of each selected slice to the ImageJ ROI Manager, as ROIs in the pixel coordinates of t
+- [ABBA - Export Registered Slices to BDV Json Dataset (Experimental)](Export/ABBA - Export Registered Slices to BDV Json Dataset (Experimental).md) - Very experimental: saves the registered selected slices, placed in atlas coordinates, as a BigDataViewer-Playg
+- [ABBA - Export Registered Slices to BDV](Export/ABBA - Export Registered Slices to BDV.md) - Shows the registered selected slices, placed in atlas coordinates, in a new BigDataViewer window. The sources 
+- [ABBA - Export Registered Slices to ImageJ](Export/ABBA - Export Registered Slices to ImageJ.md) - Exports the registered (deformed) selected slices as an ImageJ image, one plane per slice, resampled at the gi
+- [ABBA - Export Registrations To QuPath Project](Export/ABBA - Export Registrations To QuPath Project.md) - For each selected slice imported from a QuPath project, saves its atlas regions and its registration (ABBA-Roi
+- [ABBA - Export Resampled Slices as BDV Source ( experimental )](Export/ABBA - Export Resampled Slices as BDV Source ( experimental ).md) - Experimental: fuses the registered selected slices into a 3D volume in atlas coordinates, resampled at the giv
+- [ABBA - Export Slices To New QuPath Project](Export/ABBA - Export Slices To New QuPath Project.md) - Creates a QuPath project (QuPath 0.7) containing the images of the selected slices, with their atlas regions a
+- [ABBA - Export Standardized ABBA Project (Zip)](Export/ABBA - Export Standardized ABBA Project (Zip).md) - Creates a standardized, shareable zip of the current ABBA session: all slices downscaled to a given pixel size
+- [ABBA - Export registered slices as QuickNII dataset](Export/ABBA - Export registered slices as QuickNII dataset.md) - Exports the selected slices as a QuickNII dataset: registered (deformed) slice images resampled within the cur
+- [ABBA - Load State](File/ABBA - Load State.md) - Loads a saved ABBA state (.abba file): slices, their positions and registrations, and the atlas slicing angles
+- [ABBA - Save State](File/ABBA - Save State.md) - Saves the current ABBA session (slices, positions, registrations, atlas slicing angles) in a .abba file. Image
+- [ABBA - Ask for help in the forum](Help/ABBA - Ask for help in the forum.md) - Opens a new post draft on the image.sc forum in a web browser, pre-filled with the versions of ABBA and its de
+- [ABBA - Check for updates](Help/ABBA - Check for updates.md) - Compares the installed ABBA version with the latest release on GitHub and shows the result in a dialog.
+- [ABBA - Give your feedback](Help/ABBA - Give your feedback.md) - Opens the ABBA user feedback form in a web browser.
+- [ABBA - Go to documentation](Help/ABBA - Go to documentation.md) - Opens the ABBA documentation website in a web browser.
+- [ABBA - Import Current ImageJ Window](Import/ABBA - Import Current ImageJ Window.md) - Imports an image opened in ImageJ as a single slice, all channels included. The image should be calibrated (pi
+- [ABBA - Import QuPath Project](Import/ABBA - Import QuPath Project.md) - Imports all images of a QuPath project as slices, one slice per project image, all channels included. Registra
+- [ABBA - Import QuickNII Project](Import/ABBA - Import QuickNII Project.md) - Imports the images of a QuickNII series (JSON file, also produced by DeepSlice) as slices, together with their
+- [ABBA - Import Sources](Import/ABBA - Import Sources.md) - Imports BigDataViewer-Playground sources as a single slice: each source becomes one channel of the slice.
+- [ABBA - Import Standardized ABBA Project (Zip)](Import/ABBA - Import Standardized ABBA Project (Zip).md) - Opens a standardized ABBA project zip, created with 'Export Standardized ABBA Project (Zip)', in a new ABBA wi
+- [ABBA - Import With Bio-Formats](Import/ABBA - Import With Bio-Formats.md) - Imports images from Bio-Formats compatible files (vsi, czi, ome.tiff, lif...) as slices. Each image series of 
+- [ABBA - Get State](Inspect/ABBA - Get State.md) - Returns the state of the session as JSON, once the queued work is done or after 'timeout_s' seconds. Compact b
+- [ABBA - Snapshot](Inspect/ABBA - Snapshot.md) - Renders slices with the atlas region borders at their current registration, or an earlier one, independently o
+- [ABBA - Wait](Inspect/ABBA - Wait.md) - Waits until the actions queued on the slices are done, at most 'timeout_s' seconds, then tells how many are st
+- [Open Atlas](Atlas/Open Atlas.md) - Opens a brain atlas, the first step of an ABBA session: its output is the input 'ba' of 'ABBA - ABBA Start' an
+- [DeepSlice Info](DeepSlice/DeepSlice Info.md) - Opens the DeepSlice guide website in a web browser.
+- [DisplaySettingsCommand](_no_menu/DisplaySettingsCommand.md) - Sets the display settings (range and color) of a channel of the slices selected in the slices table. **Dynamic
+- [AtlasAdjustDisplayCommand](_no_menu/AtlasAdjustDisplayCommand.md) - **Dynamic command**: its choices and defaults are computed when it starts. Call `fiji_module_describe` with it
+- [AllenBrainAdultMouseAtlasCCF2017Command](_no_menu/AllenBrainAdultMouseAtlasCCF2017Command.md)
+- [AllenBrainAdultMouseAtlasCCF2017v3p1Command](_no_menu/AllenBrainAdultMouseAtlasCCF2017v3p1Command.md)
+- [AllenBrainAdultMouseAtlasCCF2017v3p1ASRCommand](_no_menu/AllenBrainAdultMouseAtlasCCF2017v3p1ASRCommand.md)
+- [WaxholmSpragueDawleyRatV4Command](_no_menu/WaxholmSpragueDawleyRatV4Command.md)
+- [WaxholmSpragueDawleyRatV4p2Command](_no_menu/WaxholmSpragueDawleyRatV4p2Command.md)
+- [WaxholmSpragueDawleyRatV4p2ASRCommand](_no_menu/WaxholmSpragueDawleyRatV4p2ASRCommand.md)

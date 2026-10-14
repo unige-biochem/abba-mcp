@@ -13,12 +13,19 @@ for a in atlas bigdataviewer-biop-tools bigdataviewer-image-loaders bigdataviewe
   got=$(printf '%s\n' "$deps" | grep -oE ":$a:[^: ]+" | head -1 | cut -d: -f3)
   if [ "$want" = "$got" ]; then echo "ok   $a $got"; else echo "FAIL $a resolved $got, ABBA declares $want"; status=1; fi
 done
-# The bundle's version is ABBA's, plus "+N" for a re-release of the bundle alone (e.g. 0.24.0+1).
-# Python spells a SNAPSHOT ".dev0": 0.24.1-SNAPSHOT in manifest.json is 0.24.1.dev0 in pyproject.toml.
+# The bundle's version is ABBA's, plus "+N" for a re-release of the bundle alone (e.g. 0.25.0+1 in manifest.json).
+# Python spells them otherwise in pyproject.toml: 0.25.0+1 is 0.25.0.post1 (PyPI refuses local versions), and
+# 0.25.1-SNAPSHOT is 0.25.1.dev0.
 root="$(dirname "$0")/.."
 abba=$(grep -oE 'ImageToAtlasRegister:[^"]+' "$1/jgo.toml" | cut -d: -f2)
 manifest=$(grep -m1 -E '^\s*"version"' "$root/manifest.json" | cut -d'"' -f4)
 project=$(grep -m1 -E '^version\s*=' "$root/pyproject.toml" | cut -d'"' -f2)
-if [ "${manifest%%+*}" = "$abba" ] && [ "$project" = "${manifest/-SNAPSHOT/.dev0}" ]; then echo "ok   bundle version $manifest, ABBA $abba"
+python=${manifest/-SNAPSHOT/.dev0}
+if [ "${manifest%%+*}" = "$abba" ] && [ "$project" = "${python/+/.post}" ]; then echo "ok   bundle version $manifest, ABBA $abba"
 else echo "FAIL bundle version: manifest.json $manifest, pyproject.toml $project, ABBA $abba"; status=1; fi
+# The display name carries the version, so that the assistant (tool names derive from it) and the user can tell
+# bundles apart: "ABBA (Fiji) - 0.24.1"
+display=$(grep -m1 -E '^\s*"display_name"' "$root/manifest.json" | cut -d'"' -f4)
+if [ "$display" = "ABBA (Fiji) - $manifest" ]; then echo "ok   display name $display"
+else echo "FAIL display name: '$display', not 'ABBA (Fiji) - $manifest'"; status=1; fi
 exit $status

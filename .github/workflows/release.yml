@@ -1,0 +1,49 @@
+name: Publish to PyPI, attach the Claude Desktop bundle
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv build
+      - run: uvx twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/abba-mcp
+    permissions:
+      id-token: write     # required for trusted publishing
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  mcpb:
+    # The same server as a Claude Desktop bundle (.mcpb), attached to the release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # to upload the release asset
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npx -y @anthropic-ai/mcpb validate manifest.json
+      - run: npx -y @anthropic-ai/mcpb pack . "abba-mcp-${GITHUB_REF_NAME#v}.mcpb"
+      - run: gh release upload "$GITHUB_REF_NAME" "abba-mcp-${GITHUB_REF_NAME#v}.mcpb" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}

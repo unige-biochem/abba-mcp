@@ -1,8 +1,8 @@
 {
   "manifest_version": "0.4",
-  "name": "abba-fiji",
-  "display_name": "ABBA (Fiji)",
-  "version": "0.24.1",
+  "name": "abba-mcp",
+  "display_name": "ABBA (Fiji) - 0.25.0",
+  "version": "0.25.0",
   "description": "Register brain sections to atlases with ABBA in Fiji, driven by your assistant",
   "long_description": "Starts ABBA (Aligning Big Brains and Atlases) in a pinned Fiji the first time it is needed, and lets the assistant run ABBA's commands, look at rendered snapshots and save the session as a replayable Groovy pipeline. Bundles version-matched documentation. Experimental.",
   "author": { "name": "Nicolas Chiaruttini", "url": "https://github.com/NicoKiaru" },
@@ -11,11 +11,11 @@
   "icon": "icon.png",
   "server": {
     "type": "uv",
-    "entry_point": "src/abba_fiji/__init__.py",
+    "entry_point": "src/abba_mcp/__init__.py",
     "mcp_config": {
       "command": "uv",
-      "args": ["run", "--directory", "${__dirname}", "abba-fiji"],
-      "env": { "ABBA_FIJI_HEADLESS": "${user_config.headless}" }
+      "args": ["run", "--directory", "${__dirname}", "abba-mcp"],
+      "env": { "ABBA_MCP_HEADLESS": "${user_config.headless}" }
     }
   },
   "user_config": {
@@ -31,19 +31,22 @@
     { "name": "fiji_module_search", "description": "Find SciJava commands and scripts whose title, menu path, description or class contain all the words of the query" },
     { "name": "fiji_module_describe", "description": "Describe a module's inputs and outputs (types, labels, descriptions, defaults and choices after its initializers ran), the live objects that can fill its object inputs, and the artifact that provides it (provided_by: groupId:artifactId:version)" },
     { "name": "fiji_module_run", "description": "Run a module (command class, menu path, title, or the path of a script file) with inputs as a JSON object, e.g. {\"sigma\": 2, \"image\": \"blobs.gif\"}" },
-    { "name": "fiji_module_status", "description": "Follow a run started by fiji_module_run: waits up to wait_seconds (default 60) and returns its result, or 'running'" },
+    { "name": "fiji_module_run_script", "description": "Run a script given as text (Groovy by default) as fiji_module_run runs a script file: same inputs, result, job id and status, nothing written to disk" },
+    { "name": "fiji_module_status", "description": "Follow a run started by fiji_module_run: waits up to wait_seconds and returns its result as fiji_module_run does, or status running (or blocked_by_dialog) with the dialogs open" },
     { "name": "fiji_objects", "description": "The live objects Fiji holds (images, viewers, sessions...): without a type, the number of objects per type; with a type, the objects of that type by the names module inputs accept" },
     { "name": "fiji_module_script", "description": "The successful fiji_module_run calls of this session as a Groovy script that replays them, every input explicit (modules declaring record=false, which only look, are left out)" },
     { "name": "fiji_ui_windows_read", "description": "List visible AWT and Swing windows, including titles, classes, bounds, active state, and modality" },
     { "name": "fiji_ui_dialogs_read", "description": "List visible AWT and Swing dialogs, including each dialog's title, messages, buttons, and modal state" },
     { "name": "fiji_ui_dialog_respond", "description": "Click an exact enabled button in one visible dialog" },
     { "name": "fiji_ui_dialog_close", "description": "Request the normal window-manager close action for one visible dialog" },
-    { "name": "abba_window_picture", "description": "Picture of one Fiji window as it is drawn, what the user sees in it: right even when the window is covered or the screen is locked, and never another application" },
+    { "name": "abba_window_picture", "description": "Picture of one Fiji window, or dialog, as it is drawn, what the user sees in it: right even when the window is covered or the screen is locked, and never another application" },
+    { "name": "abba_window_view", "description": "Sets what an ABBA window shows the user: its mode, its current slice, the channels shown, and what is framed" },
+    { "name": "abba_fiji_stop", "description": "Stops the Fiji this extension started, and only that one: its windows close and unsaved work is lost" },
     { "name": "abba_docs_search", "description": "Search the bundled ABBA documentation (guides, one file per command, scripting, examples) with a regular expression; returns matching lines with their file" },
     { "name": "abba_docs_read", "description": "Read one bundled documentation file, by its path relative to the docs folder (as abba_docs_search gives it)" }
   ],
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "compatibility": { "runtimes": { "python": ">=3.10" } },
-  "repository": { "type": "git", "url": "https://github.com/BIOP/ijp-imagetoatlas" },
+  "repository": { "type": "git", "url": "https://github.com/unige-biochem/abba-mcp" },
   "privacy_policies": []
 }

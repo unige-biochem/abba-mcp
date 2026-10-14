@@ -1,0 +1,41 @@
+[environment]
+name = "abba-mcp"
+description = "ABBA in Fiji with an MCP server for AI assistants"
+
+[java]
+# Read by the server, which fetches this JDK itself (cjdk) and puts it first for jgo: on its own, jgo runs any
+# Java already installed that is at least this version.
+version = "21"
+vendor = "zulu"
+
+[repositories]
+# ABBA, fiji-llm and fiji-modules are on the SciJava repository only, not on Maven Central (jgo's only default)
+scijava = "https://maven.scijava.org/content/groups/public"
+
+[dependencies]
+coordinates = [
+    # fiji-llm's MCP server needs Jetty 11 and Jackson 2.19; the ABBA stack alone resolves Jetty 9.4 and Jackson 2.16.
+    "com.fasterxml.jackson.core:jackson-annotations:2.19.2",
+    "com.fasterxml.jackson.core:jackson-core:2.19.2",
+    "com.fasterxml.jackson.core:jackson-databind:2.19.2",
+    "org.eclipse.jetty:jetty-server:11.0.20",
+    "org.eclipse.jetty:jetty-servlet:11.0.20",
+    "org.eclipse.jetty:jetty-util:11.0.20",
+    "org.eclipse.jetty:jetty-http:11.0.20",
+    "org.eclipse.jetty:jetty-io:11.0.20",
+    "org.eclipse.jetty:jetty-security:11.0.20",
+    # ABBA's pom pins atlas, biop-tools, image-loaders and bdv-playground. An override goes after ABBA:
+    # listed first, an artifact's own dependencies win (build/check_env.sh guards against that).
+    "ch.epfl.biop:ImageToAtlasRegister:0.25.0",
+    "sc.fiji:fiji:2.18.0",
+    "sc.fiji:fiji-llm:0.1.0",
+    "ch.unige.biochem:fiji-modules:0.1.2",
+]
+
+[entrypoints]
+fiji = "net.imagej.Main"
+module = "sc.fiji.llm.module.ModuleCLI"
+default = "fiji"
+
+[settings]
+cache_dir = ".jgo"
