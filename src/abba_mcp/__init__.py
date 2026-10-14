@@ -80,10 +80,29 @@ NOTES = {
 }
 
 
+# What each tool may do, for clients deciding which calls the user confirms: the ones that only look are read-only;
+# stopping Fiji is destructive (unsaved work is lost); running a module may be (deleting slices, say), so it keeps
+# MCP's default. All act on this computer only.
+READ_ONLY = {"fiji_module_search", "fiji_module_describe", "fiji_module_status", "fiji_objects", "fiji_ui_windows_read",
+             "fiji_ui_dialogs_read", "abba_window_picture", "abba_docs_search", "abba_docs_read"}
+DESTRUCTIVE = {"abba_fiji_stop"}
+
+
+def annotations(name: str) -> types.ToolAnnotations:
+    if name in READ_ONLY:
+        return types.ToolAnnotations(readOnlyHint=True, openWorldHint=False)
+    if name in DESTRUCTIVE:
+        return types.ToolAnnotations(title="Stop Fiji (closes ABBA; unsaved work is lost)", readOnlyHint=False,
+                                     destructiveHint=True, openWorldHint=False)
+    if name == "abba_window_view":  # changes the view only
+        return types.ToolAnnotations(readOnlyHint=False, destructiveHint=False, idempotentHint=True, openWorldHint=False)
+    return types.ToolAnnotations(readOnlyHint=False, openWorldHint=False)
+
+
 @functools.cache
 def fiji_tools() -> dict:
     return {t["name"]: types.Tool(name=t["name"], description=" ".join(filter(None, [t["description"], NOTES.get(t["name"])])),
-                                  inputSchema=t["inputSchema"])
+                                  inputSchema=t["inputSchema"], annotations=annotations(t["name"]))
             for t in json.loads(FIJI_TOOLS_FILE.read_text(encoding="utf-8"))}
 
 PICTURE_SCRIPT = DATA / "scripting" / "window_picture.groovy"
@@ -113,9 +132,11 @@ BUNDLE_TOOLS = {
                                             "'*' for all, 'none'; empty keeps them",
                           "atlas_channels": "atlas channels to show, in the order of 'atlas_channels' in ABBA - Get "
                                             "State, e.g. '0,2' (Allen: Nissl and borders), 'none'; empty keeps them"}, []),
-    "abba_fiji_stop": ("Stops the Fiji this extension started, and only that one: its windows close and unsaved work "
-                       "is lost. Only when the user asks or agrees (Fiji frozen, a restart needed). The next Fiji tool "
-                       "call starts a new Fiji.", {}, []),
+    "abba_fiji_stop": ("Stops the Fiji this extension started: the ABBA window closes and unsaved work is lost. Only "
+                       "when the user explicitly asks to stop or restart Fiji. Never to check, wait for or speed up a "
+                       "start: a start taking minutes is normal, and stopping it starts it all over again. To look at "
+                       "Fiji, use fiji_ui_windows_read or abba_window_picture.",
+                       {"user_request": "the user's own words asking to stop or restart Fiji, quoted"}, ["user_request"]),
     "abba_docs_search": ("Search the bundled ABBA documentation (guides, one file per command, scripting, examples) with a "
                          "regular expression; returns matching lines with their file. For assistants without file access: "
                          "with file access, grep the docs folder named in the instructions instead. This server: bundle "
@@ -128,7 +149,7 @@ BUNDLE_TOOLS = {
 
 def tool(name, spec):
     description, props, required = spec
-    return types.Tool(name=name, description=description, inputSchema={
+    return types.Tool(name=name, description=description, annotations=annotations(name), inputSchema={
         "type": "object",
         "properties": {k: {"type": "string", "description": v} for k, v in props.items()},
         "required": required})
@@ -229,6 +250,16 @@ def _our_fiji():
         return pid if _is_ours(pid, PID_FILE.stat().st_mtime) else None
     except (OSError, ValueError):
         return None
+
+
+def _stop_requested(user_request: str) -> str:
+    """abba_fiji_stop: refused while Fiji starts, and without the user's request."""
+    if not user_request.strip():
+        raise ValueError("Not stopped: abba_fiji_stop needs the user's own words asking to stop or restart Fiji.")
+    if (_starting is not None and not _starting.done()) or (not _port_open() and _our_fiji() is not None):
+        raise ValueError("Not stopped: Fiji is starting, which takes minutes the first time. Stopping it would start it "
+                         "all over again: call a Fiji tool again to wait, or fiji_ui_windows_read to look.")
+    return _stop_fiji()
 
 
 def _stop_fiji() -> str:
@@ -412,7 +443,7 @@ def main() -> int:
             return await _forward("fiji_module_run", {"id": PICTURE_SCRIPT.as_posix(), "inputs": json.dumps(inputs),
                                                       "wait_seconds": "30"}, gui)
         if name == "abba_fiji_stop":
-            return [types.TextContent(type="text", text=_stop_fiji())]
+            return [types.TextContent(type="text", text=_stop_requested((arguments or {}).get("user_request", "")))]
         if name == "abba_window_view":
             inputs = {k: v for k, v in (arguments or {}).items() if v not in (None, "")}
             return await _forward("fiji_module_run", {"id": VIEW_SCRIPT.as_posix(), "inputs": json.dumps(inputs),

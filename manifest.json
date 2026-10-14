@@ -1,8 +1,8 @@
 {
   "manifest_version": "0.4",
   "name": "abba-mcp",
-  "display_name": "ABBA (Fiji) - 0.25.0",
-  "version": "0.25.0",
+  "display_name": "ABBA (Fiji) - 0.25.0+1",
+  "version": "0.25.0+1",
   "description": "Register brain sections to atlases with ABBA in Fiji, driven by your assistant",
   "long_description": "Starts ABBA (Aligning Big Brains and Atlases) in a pinned Fiji the first time it is needed, and lets the assistant run ABBA's commands, look at rendered snapshots and save the session as a replayable Groovy pipeline. Bundles version-matched documentation. Experimental.",
   "author": { "name": "Nicolas Chiaruttini", "url": "https://github.com/NicoKiaru" },
@@ -41,7 +41,7 @@
     { "name": "fiji_ui_dialog_close", "description": "Request the normal window-manager close action for one visible dialog" },
     { "name": "abba_window_picture", "description": "Picture of one Fiji window, or dialog, as it is drawn, what the user sees in it: right even when the window is covered or the screen is locked, and never another application" },
     { "name": "abba_window_view", "description": "Sets what an ABBA window shows the user: its mode, its current slice, the channels shown, and what is framed" },
-    { "name": "abba_fiji_stop", "description": "Stops the Fiji this extension started, and only that one: its windows close and unsaved work is lost" },
+    { "name": "abba_fiji_stop", "description": "Stops the Fiji this extension started: the ABBA window closes and unsaved work is lost" },
     { "name": "abba_docs_search", "description": "Search the bundled ABBA documentation (guides, one file per command, scripting, examples) with a regular expression; returns matching lines with their file" },
     { "name": "abba_docs_read", "description": "Read one bundled documentation file, by its path relative to the docs folder (as abba_docs_search gives it)" }
   ],

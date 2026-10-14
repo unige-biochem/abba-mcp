@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "abba-mcp"
-version = "0.25.0"
+version = "0.25.0.post1"
 description = "MCP server for ABBA (Aligning Big Brains and Atlases): an AI assistant registers brain sections to atlases in a pinned Fiji"
 readme = "README.md"
 license = "MIT"

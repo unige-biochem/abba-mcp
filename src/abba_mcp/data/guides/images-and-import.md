@@ -24,7 +24,7 @@
   through a shared read-only account: no credentials needed. A credentials dialog means the connection
   failed: tell the user, do not ask for a password). `project_directory` keeps the demo's QuPath project, to
   export registrations into: the command creates it if needed. Importing the demo again in the same Fiji reuses
-  the first import's images, and their project: stop Fiji first (`abba_fiji_stop`, after saving).
+  the first import's images, and their project: ask the user whether to restart Fiji first (after saving).
   A state saved from the demo, loaded in another Fiji, asks for OMERO credentials: connect first with
   `Omero - Connect` (host `omero-tim.gerbi-gmb.de`, port 4064, the demo's public read-only account:
   username and password `read-tim`), then load the state.
