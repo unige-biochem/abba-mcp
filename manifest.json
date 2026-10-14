@@ -1,8 +1,8 @@
 {
   "manifest_version": "0.4",
   "name": "abba-mcp",
-  "display_name": "ABBA (Fiji) - 0.25.0+1",
-  "version": "0.25.0+1",
+  "display_name": "ABBA (Fiji) - 0.25.0+2",
+  "version": "0.25.0+2",
   "description": "Register brain sections to atlases with ABBA in Fiji, driven by your assistant",
   "long_description": "Starts ABBA (Aligning Big Brains and Atlases) in a pinned Fiji the first time it is needed, and lets the assistant run ABBA's commands, look at rendered snapshots and save the session as a replayable Groovy pipeline. Bundles version-matched documentation. Experimental.",
   "author": { "name": "Nicolas Chiaruttini", "url": "https://github.com/NicoKiaru" },

@@ -203,8 +203,9 @@ def _start_fiji(gui: bool, java_home: Path):
     opts = f"--add-opens=java.base/java.lang=ALL-UNNAMED -Dlogback.configurationFile={here}/logback.xml"
     if not gui:
         opts += " -Djava.awt.headless=true"
-    if "ABBA_MCP_PORT" in os.environ:  # read by startmcp.groovy
-        opts += f" -Dabba.mcp.port={PORT}"
+    # Read by startmcp.groovy: the port to serve on (fiji-llm's own preference may hold another one), and where to
+    # say which port it took
+    opts += f" -Dabba.mcp.port={PORT} -Dabba.mcp.home={STATE.as_posix()}"
     env["JAVA_TOOL_OPTIONS"] = opts
     args = _jgo() + ["--lenient", "--class-path-only", "run", "--local", "--", "--"]
     # Not single instance: otherwise, with another Fiji open (the user's own), ImageJ passes the arguments to it, and
@@ -256,9 +257,11 @@ def _stop_requested(user_request: str) -> str:
     """abba_fiji_stop: refused while Fiji starts, and without the user's request."""
     if not user_request.strip():
         raise ValueError("Not stopped: abba_fiji_stop needs the user's own words asking to stop or restart Fiji.")
-    if (_starting is not None and not _starting.done()) or (not _port_open() and _our_fiji() is not None):
-        raise ValueError("Not stopped: Fiji is starting, which takes minutes the first time. Stopping it would start it "
-                         "all over again: call a Fiji tool again to wait, or fiji_ui_windows_read to look.")
+    starting = (_starting is not None and not _starting.done()) or (not _port_open() and _our_fiji() is not None)
+    if starting and _log_quiet_s() < 120:  # a start in progress; one whose log is still for minutes may be stuck
+        raise ValueError("Not stopped: Fiji is starting, which takes minutes the first time, and its log is still "
+                         "moving. Stopping it would start it all over again: call a Fiji tool again to wait, or "
+                         "fiji_ui_windows_read to look.")
     return _stop_fiji()
 
 
@@ -299,11 +302,51 @@ async def _start(gui: bool):
             return
         if _our_fiji() is None:  # it died: say why
             raise RuntimeError(f"Fiji stopped while starting. Log {STATE / 'fiji.log'}:\n{_log_tail(1500)}")
+        served = _served_port()
+        if served is not None and served != PORT:  # it listens elsewhere: waiting would never end
+            _stop_fiji()
+            raise RuntimeError(f"Fiji started its MCP server on port {served}, not {PORT}: stopped it. Call the tool "
+                               f"again; if it happens again, see {STATE / 'mcp-started.txt'}.")
         if "Detected existing ImageJ" in _log_tail(5000):  # it handed its arguments to another Fiji, and idles
             _stop_fiji()
             raise RuntimeError("Fiji did not start: another Fiji took its startup script (ImageJ's single instance "
                                "mode). Ask the user to close the other Fiji, then call the tool again.")
     raise RuntimeError(f"Fiji did not start within {START_TIMEOUT_S} s, see {STATE / 'fiji.log'}")
+
+
+def _served_port():
+    """The port this start's Fiji serves on, as startmcp.groovy wrote it, or None before it did."""
+    f = STATE / "mcp-started.txt"
+    try:
+        if f.stat().st_mtime < _started_at:  # from an earlier start
+            return None
+        m = re.search(r"port=(\d+)", f.read_text(encoding="utf-8"))
+        return int(m.group(1)) if m else None
+    except OSError:
+        return None
+
+
+# Harmless lines of every start, left out of what the assistant is shown
+LOG_NOISE = ("JavaScriptScriptLanguage", "Picked up JAVA_TOOL_OPTIONS")
+
+
+def _log_quiet_s() -> float:
+    """Seconds since fiji.log last changed."""
+    try:
+        return time.time() - (STATE / "fiji.log").stat().st_mtime
+    except OSError:
+        return 0.0
+
+
+def _starting_message() -> str:
+    lines = [l for l in _log_tail(3000).strip().splitlines() if l.strip() and not any(n in l for n in LOG_NOISE)]
+    last, quiet, pid = (lines or ["(nothing yet)"])[-1], _log_quiet_s(), _our_fiji()
+    state = (f"Fiji runs (process {pid}) but nothing answers on port {PORT} yet, and its log has not changed for "
+             f"{quiet:.0f} s: it may wait on a dialog (fiji_ui_dialogs_read), or be stuck (ask the user)"
+             if pid is not None and quiet > 120 else
+             "the first start downloads Java, Fiji and ABBA and takes minutes")
+    return (f"Not run: Fiji is starting ({time.time() - _started_at:.0f} s so far; {state}). Tell the user, then call "
+            f"the tool again. Last line of {STATE / 'fiji.log'}: {last}")
 
 
 def _log_tail(chars: int) -> str:
@@ -327,10 +370,7 @@ async def _ensure_fiji(gui: bool):
     try:
         await asyncio.wait_for(asyncio.shield(task), MAX_WAIT_S)
     except asyncio.TimeoutError:
-        last = (_log_tail(300).strip().splitlines() or ["(nothing yet)"])[-1]
-        raise RuntimeError(f"Not run: Fiji is starting ({time.time() - _started_at:.0f} s so far; the first start "
-                           f"downloads Java, Fiji and ABBA and takes minutes). Tell the user, then call the tool "
-                           f"again. Last line of {STATE / 'fiji.log'}: {last}") from None
+        raise RuntimeError(_starting_message()) from None
     finally:
         if task.done() and _starting is task:  # started, or failed: a later call starts afresh
             _starting = None

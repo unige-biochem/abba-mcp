@@ -4,10 +4,11 @@
 // Starts fiji-llm's MCP server; headless, keeps the JVM (and the server) alive until killed.
 import sc.fiji.llm.mcp.MCPService
 
+// The port abba-mcp waits on (9090, or ABBA_MCP_PORT). fiji-llm reads it from a preference shared by every Fiji of
+// this user, which another Fiji may have left at another value: set it while the server starts, then put it back.
+def port = System.getProperty("abba.mcp.port")
 if (!mcp.isServerRunning()) {
-    def port = System.getProperty("abba.mcp.port") // ABBA_MCP_PORT, for several bundles side by side (tests)
     if (port) {
-        // The port is a preference shared by every Fiji of this user: set only while the server reads it
         def before = prefs.get(MCPService, MCPService.PORT_KEY, null)
         prefs.put(MCPService, MCPService.PORT_KEY, port as int)
         try { mcp.startServer() }
@@ -16,5 +17,7 @@ if (!mcp.isServerRunning()) {
         mcp.startServer()
     }
 }
-new File(System.getProperty("java.io.tmpdir"), "mcp-started.txt").text = "port=" + mcp.getServerPort() + " tools=" + mcp.getToolCount() + " headless=" + ui.isHeadless()
+// For the server, which checks that Fiji listens where it waits
+def home = System.getProperty("abba.mcp.home") ?: System.getProperty("java.io.tmpdir")
+new File(home, "mcp-started.txt").text = "port=" + (port ?: mcp.getServerPort()) + " tools=" + mcp.getToolCount() + " headless=" + ui.isHeadless()
 if (ui.isHeadless()) while (true) Thread.sleep(60000)
